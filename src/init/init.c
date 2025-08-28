@@ -6,7 +6,7 @@
 /*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 18:06:43 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/08/28 19:15:54 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:21:17 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ int init_data_structures(t_data *data)
 	if (!data->map)
 	{
 		write(2, "\033[91mERROR\nMemory allocation failed\n", 36);
-		return -1;
+		return 1;
 	}
 
 	if (init_map(data->map) == -1)
 	{
 		free(data->map);
 		write(2, "\033[91mERROR\nMap initialization failed\n", 36);
-		return -1;
+		return 1;
 	}
 
 	return 0;

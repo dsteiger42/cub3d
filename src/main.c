@@ -6,7 +6,7 @@
 /*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:31:13 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/08/28 19:16:58 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:24:29 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,18 @@ int main(int ac, char *av[])
 	t_data data = {0};
 
 
-	if (ac != 2 || init_data_structures(&data))
+	//verificar se mantem mensagens de erros diferentes, se meter uma mensagem generica podemos fazer if(ac != 2 || init_data_structures(&data))
+	if (ac != 2)
 	{
 		write(2, "\033[91mERROR\nWrong number of args\n", 33);
+		return -1;
+	}
+	if (init_data_structures(&data))
+	{
 		free_data(&data);
 		return -1;
 	}
+
 	if (valid_map_name(av[1]) == -1 || validfd(data.map, av[1]) == -1 || valid_map(av[1]) == -1)
 	{
 		free_data(&data);
