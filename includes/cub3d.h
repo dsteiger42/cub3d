@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dsteiger <dsteiger@student.42.fr>          +#+  +:+       +#+        */
+/*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 16:21:07 by dsteiger          #+#    #+#             */
-/*   Updated: 2025/08/21 16:21:08 by dsteiger         ###   ########.fr       */
+/*   Updated: 2025/08/28 18:29:33 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include <string.h>     // strerror
 #include <sys/time.h>   // gettimeofday
 #include <math.h>
+#include <libft.h>
+#include <get_next_line.h>
 
 // colours for pixels
 #define _BLACK   0x000000
@@ -48,5 +50,32 @@
 # define DOWN_ARROW 65364
 # define RIGTH_ARROW 65363
 # define ESC 65307
+
+typedef struct s_map
+{
+	char	*map;
+	int		line_count;
+}	t_map;
+
+typedef struct s_data //images
+{
+	//void		*mlx;
+	//void		*mlx_win;
+	t_map		*map;
+}	t_data;
+
+
+// init/init.c
+void init_data(t_data *data);
+void init_map(t_map *map);
+
+// parsing/check_map.c
+int skip_spaces(char c);
+int valid_map_name(char *av);
+int validfd(t_map *map, char *file);
+int valid_map(char *file);
+
+
+
 
 #endif
