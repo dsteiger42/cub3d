@@ -6,19 +6,36 @@
 /*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 18:06:43 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/08/28 18:08:20 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:15:54 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void init_data(t_data *data)
+int init_map(t_map *map)
 {
-	data->map = NULL;
-}
-
-void init_map(t_map *map)
-{
+	if (!map)
+		return -1;
 	map->map = NULL;
 	map->line_count = 0;
+	return 0;
+}
+
+int init_data_structures(t_data *data)
+{
+	data->map = malloc(sizeof(t_map));
+	if (!data->map)
+	{
+		write(2, "\033[91mERROR\nMemory allocation failed\n", 36);
+		return -1;
+	}
+
+	if (init_map(data->map) == -1)
+	{
+		free(data->map);
+		write(2, "\033[91mERROR\nMap initialization failed\n", 36);
+		return -1;
+	}
+
+	return 0;
 }

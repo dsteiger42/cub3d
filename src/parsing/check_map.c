@@ -6,7 +6,7 @@
 /*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:53:43 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/08/28 18:28:15 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/08/28 19:03:21 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,11 @@ int valid_map(char *file)
 			c = line[i++];
 			if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
 				erro++;
+			if (erro > 1)
+				{
+					write(2, "\033[91mERROR\nInvalid character\n", 30);
+					return (-1);
+				}
 			else if (c != '0' && c != '1' && c != '\n')
 			{
 				free(line);
@@ -99,11 +104,6 @@ int valid_map(char *file)
 		}
 		free(line);
 		line = get_next_line(fd);
-	}
-	if (erro != 1)
-	{
-		write(2, "\033[91mERROR\nInvalid character\n", 30);
-		return (-1);
 	}
 	return (0);
 }
