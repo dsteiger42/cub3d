@@ -6,7 +6,7 @@
 /*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:53:43 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/08/29 16:22:18 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/08/29 17:50:02 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int valid_map(t_data *data, char *file)
         while (line[i])
         {
             c = line[i];
-            if (c != '0' && c != '1' && c != ' ' && c != '\n' &&
+            if (c != '0' && c != '1' && c != ' ' && c != '\t' && c != '\v' && c != '\r' && c != '\f' && c != '\n' &&
 				c != 'N' && c != 'S' && c != 'E' && c != 'W' )
             {
                 free(line);
@@ -88,8 +88,8 @@ int valid_map(t_data *data, char *file)
             if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
             {
                 start_count++;
-                data->start[0] = line_num;   // y
-                data->start[1] = i;          // x
+                data->start[0] = line_num + 1;   // y
+                data->start[1] = i +1 ;          // x
                 if (start_count > 1)
                 {
                     free(line);

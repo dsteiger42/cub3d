@@ -6,7 +6,7 @@
 /*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 16:31:03 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/08/29 17:20:19 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/08/29 17:40:28 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,14 @@ int	dupmap(t_data *data)
 int ft_floodfill(char **map, int y, int x, int line_count)
 {
     // verifica limites do mapa
-    if (y < 0 || x < 0 || y >= line_count || !map[y] || x >= (int)strlen(map[y]) || map[y][x] == ' ')
+    if (y < 0 || x < 0 || y >= line_count || !map[y] ||
+		x >= (int)ft_strlen(map[y]) || map[y][x] == ' ')
 	{
 		printf("mapa aberto");
 		return 1;
 	}
-    // parede ou já visitado
     if (map[y][x] == '1')
-        return 0; // caminho seguro
+        return 0;
     map[y][x] = '1';
     if (ft_floodfill(map, y + 1, x, line_count))
         return 1;
@@ -80,8 +80,7 @@ int ft_floodfill(char **map, int y, int x, int line_count)
         return 1;
     if (ft_floodfill(map, y, x - 1, line_count))
         return 1;
-
-    return 0; // mapa fechado
+    return 0;
 }
 
 int	create_map(t_data *data,char *av)
