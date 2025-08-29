@@ -6,7 +6,8 @@ NAME = cub3D
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g3
 
-SRC = src/main.c src/parsing/check_map.c src/init/init.c 
+SRC = src/main.c src/parsing/check_map.c src/parsing/create_map.c src/init/init.c \
+	src/utils.c
 OBJ_DIR = objects
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 

@@ -6,6 +6,8 @@
 		"span": "c",
 		"map": "c",
 		"format": "c",
-		"random": "c"
+		"random": "c",
+		"cub3d.h": "c",
+		"sstream": "c"
 	}
 }
