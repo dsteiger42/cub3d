@@ -6,13 +6,10 @@
 /*   By: dsteiger <dsteiger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 16:21:07 by dsteiger          #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2025/08/29 16:37:55 by scarlos-         ###   ########.fr       */
-=======
-/*   Updated: 2025/08/29 17:00:12 by dsteiger         ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2025/08/29 19:08:15 by dsteiger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef CUB3D_H
 #define CUB3D_H
@@ -26,6 +23,7 @@
 #include <math.h>
 #include <libft.h>
 #include <get_next_line.h>
+#include <mlx.h>
 
 // colours for pixels
 #define _BLACK   0x000000
@@ -55,6 +53,13 @@
 # define RIGTH_ARROW 65363
 # define ESC 65307
 
+typedef struct s_player
+{
+	int pos_x;
+	int pos_y;
+	
+}	t_player;
+
 typedef struct s_map
 {
 	char	**map;
@@ -64,30 +69,24 @@ typedef struct s_map
 
 typedef struct s_data //images
 {
-<<<<<<< Updated upstream
-	//void		*mlx;
-	//void		*mlx_win;
-	t_map		*pmap;
-	int			start[2];
-=======
 	void		*mlx;
 	void		*mlx_win;
-	t_map		*map;
->>>>>>> Stashed changes
+	t_player	player;
+	t_map		*pmap;
 }	t_data;
 
-
-
-// error_exit/exit.c
+//error_exit/exit.c
 void	clean_exit(t_data *data, int exit_code);
-int	err_msg(char *msg, char *str, int exit_code);
+int	err_msg(char *msg, int exit_code);
 
-// init/init.c
+
+
+//init/init.c
+void	init_mlx(t_data *data);
 int		init_map(t_map *map);
 int		init_data_structures(t_data *data);
 
-// parsing/check_map.c
-int skip_spaces(char c);
+//parsing/check_map.c
 int valid_map_name(char *av);
 int validfd(t_map *map, char *file);
 int valid_map(t_data *data, char *file);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dsteiger <dsteiger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 16:31:03 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/08/29 17:40:28 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/08/29 18:27:34 by dsteiger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ int	allocmap(t_data *data, char *av)
 
 	fd = open(av, O_RDONLY);
 	if (fd < 0)
-		return (1 * write(2, "\033[91mERROR\nInvalid file\n", 25));
+    {
+        write(2, "\033[91mERROR\nInvalid file\n", 25);
+        return (1);
+    }
 	data->pmap->map = malloc(sizeof(char *) * (data->pmap->line_count + 1));
 	if (!data->pmap->map)
 		return (1 * write(2, "\033[91mERROR\nMalloc Failed\n", 26));
@@ -66,7 +69,7 @@ int ft_floodfill(char **map, int y, int x, int line_count)
     if (y < 0 || x < 0 || y >= line_count || !map[y] ||
 		x >= (int)ft_strlen(map[y]) || map[y][x] == ' ')
 	{
-		printf("mapa aberto");
+		printf("mapa aberto\n");
 		return 1;
 	}
     if (map[y][x] == '1')
@@ -89,11 +92,11 @@ int	create_map(t_data *data,char *av)
 			return (1);
 		if (dupmap(data))
 			return (1);
-		if (ft_floodfill(data->pmap->map2, data->start[0], data->start[1], data->pmap->line_count))
+		if (ft_floodfill(data->pmap->map2, data->player.pos_x, data->player.pos_y, data->pmap->line_count))
 		{
 			return (1);
 		}
-		printf("y = %d\nx = %d\n", data->start[0], data->start[1]);
+		printf("y = %d\nx = %d\n", data->player.pos_x, data->player.pos_y);
 		print_map(data);
 		return 0;
 }

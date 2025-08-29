@@ -1,22 +1,14 @@
-# --------------------- #
-#      Variables        #
-# --------------------- #
-
 NAME = cub3D
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g3
 
-<<<<<<< Updated upstream
-SRC = src/main.c src/parsing/check_map.c src/parsing/create_map.c src/init/init.c \
+SRC = src/main.c \
+	src/parsing/check_map.c \
+	src/parsing/create_map.c \
+	src/init/init.c \
+	src/error_exit/exit.c \
 	src/utils.c
-=======
-SRC = src/main.c /
-src/parsing/check_map.c /
-src/init/init.c /
-src/init/init_mlx.c /
-src/error_exit/exit.c
 
->>>>>>> Stashed changes
 OBJ_DIR = objects
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
@@ -25,10 +17,6 @@ INC = -I includes/ -I includes/libft/ -I includes/minilibx-linux/
 LIBFT_PATH = includes/libft/
 MLX_PATH = includes/minilibx-linux/
 MLX = $(MLX_PATH)libmlx_Linux.a
-
-# --------------------- #
-#       Rules           #
-# --------------------- #
 
 all: $(NAME)
 

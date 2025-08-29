@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dsteiger <dsteiger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:53:43 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/08/29 17:50:02 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/08/29 18:36:13 by dsteiger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ int valid_map(t_data *data, char *file)
 {
     int fd;
     char *line;
-    int line_num = 0;
-    int i;
+    int pos_y = 0;
+    int pos_x;
     char c;
     int start_count = 0;
 
@@ -73,10 +73,11 @@ int valid_map(t_data *data, char *file)
     line = get_next_line(fd);
     while (line)
     {
-        i = 0;
-        while (line[i])
+        pos_x = 0;
+        while (line[pos_x])
         {
-            c = line[i];
+            c = line[pos_x];
+            //if (!ft_strchr("01NSEW \t\v\r\f\n", c)) outra maneira de escrever
             if (c != '0' && c != '1' && c != ' ' && c != '\t' && c != '\v' && c != '\r' && c != '\f' && c != '\n' &&
 				c != 'N' && c != 'S' && c != 'E' && c != 'W' )
             {
@@ -88,8 +89,8 @@ int valid_map(t_data *data, char *file)
             if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
             {
                 start_count++;
-                data->start[0] = line_num + 1;   // y
-                data->start[1] = i +1 ;          // x
+                data->player.pos_x = pos_x;
+                data->player.pos_y = pos_y;
                 if (start_count > 1)
                 {
                     free(line);
@@ -98,10 +99,10 @@ int valid_map(t_data *data, char *file)
                     return -1;
                 }
             }
-            i++;
+            pos_x++;
         }
         free(line);
-        line_num++;
+        pos_y++;
         line = get_next_line(fd);
     }
     close(fd);
