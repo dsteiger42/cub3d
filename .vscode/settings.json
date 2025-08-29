@@ -5,6 +5,7 @@
 		"string_view": "c",
 		"span": "c",
 		"map": "c",
-		"format": "c"
+		"format": "c",
+		"random": "c"
 	}
 }

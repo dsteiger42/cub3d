@@ -6,18 +6,11 @@
 /*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:53:43 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/08/29 14:53:36 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/08/29 16:22:18 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
-
-int skip_spaces(char c)
-{
-	if (c == 32 || (c >= 9 && c <= 13))
-		return (0);
-	return (1);
-}
 
 int valid_map_name(char *av)
 {
@@ -62,49 +55,55 @@ int validfd(t_map *map, char *file)
 	return (0);
 }
 
-int valid_map(char *file)
+int valid_map(t_data *data, char *file)
 {
-	int fd;
-	char *line;
-	int i;
-	char c;
-	int erro = 0;
+    int fd;
+    char *line;
+    int line_num = 0;
+    int i;
+    char c;
+    int start_count = 0;
 
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-	{
-		write(2, "\033[91mERROR\nInvalid fd\n", 23);
-		return (-1);
-	}
-	line = get_next_line(fd);
-	while (line)
-	{
-		i = 0;
-		while (line[i])
-		{
-			if (!skip_spaces(line[i]))
-			{
-				i++;
-				continue;
-			}
-			c = line[i++];
-			if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
-				erro++;
-			if (erro > 1)
-				{
-					write(2, "\033[91mERROR\nInvalid character\n", 30);
-					return (-1);
-				}
-			else if (c != '0' && c != '1' && c != '\n' &&
-					 c != 'N' && c != 'S' && c != 'W' && c != 'E')
-			{
-				free(line);
-				write(2, "\033[91mERROR\nInvalid character\n", 30);
-				return (-1);
-			}
-		}
-		free(line);
-		line = get_next_line(fd);
-	}
-	return (0);
+    fd = open(file, O_RDONLY);
+    if (fd < 0)
+    {
+        write(2, "\033[91mERROR\nInvalid fd\n", 23);
+        return -1;
+    }
+    line = get_next_line(fd);
+    while (line)
+    {
+        i = 0;
+        while (line[i])
+        {
+            c = line[i];
+            if (c != '0' && c != '1' && c != ' ' && c != '\n' &&
+				c != 'N' && c != 'S' && c != 'E' && c != 'W' )
+            {
+                free(line);
+                write(2, "\033[91mERROR\nInvalid character\n", 30);
+                close(fd);
+                return -1;
+            }
+            if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+            {
+                start_count++;
+                data->start[0] = line_num;   // y
+                data->start[1] = i;          // x
+                if (start_count > 1)
+                {
+                    free(line);
+                    write(2, "\033[91mERROR\nMultiple start positions\n", 36);
+                    close(fd);
+                    return -1;
+                }
+            }
+            i++;
+        }
+        free(line);
+        line_num++;
+        line = get_next_line(fd);
+    }
+    close(fd);
+    return 0;
 }

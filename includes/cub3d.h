@@ -6,7 +6,7 @@
 /*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 16:21:07 by dsteiger          #+#    #+#             */
-/*   Updated: 2025/08/29 15:19:40 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/08/29 16:17:54 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ typedef struct s_data //images
 {
 	//void		*mlx;
 	//void		*mlx_win;
-	t_map		*map;
+	t_map		*pmap;
+	int			start[2];
 }	t_data;
 
 
@@ -75,7 +76,7 @@ int		init_data_structures(t_data *data);
 int skip_spaces(char c);
 int valid_map_name(char *av);
 int validfd(t_map *map, char *file);
-int valid_map(char *file);
+int valid_map(t_data *data, char *file);
 
 
 
