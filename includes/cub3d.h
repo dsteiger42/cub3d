@@ -6,7 +6,7 @@
 /*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 16:21:07 by dsteiger          #+#    #+#             */
-/*   Updated: 2025/08/28 18:52:31 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/08/29 15:19:40 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@
 
 typedef struct s_map
 {
-	char	*map;
+	char	**map;
+	char	**map2;
 	int		line_count;
 }	t_map;
 

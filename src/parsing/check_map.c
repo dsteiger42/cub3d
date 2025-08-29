@@ -6,7 +6,7 @@
 /*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:53:43 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/08/28 19:03:21 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/08/29 14:53:36 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int valid_map_name(char *av)
 		write(2, "\033[91mERROR\nInvalid pointer\n", 28);
 		return (-1);
 	}
-	len = strlen(av); // mudar pra ft_strlen
+	len = ft_strlen(av);
 	if (len < 4 || ft_strncmp(&av[len - 4], ".cub", 4) != 0)
 	{
 		write(2, "\033[91mERROR\nMap is not a .cub file\n", 35);
@@ -95,7 +95,8 @@ int valid_map(char *file)
 					write(2, "\033[91mERROR\nInvalid character\n", 30);
 					return (-1);
 				}
-			else if (c != '0' && c != '1' && c != '\n')
+			else if (c != '0' && c != '1' && c != '\n' &&
+					 c != 'N' && c != 'S' && c != 'W' && c != 'E')
 			{
 				free(line);
 				write(2, "\033[91mERROR\nInvalid character\n", 30);
