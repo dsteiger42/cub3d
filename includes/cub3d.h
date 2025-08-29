@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dsteiger <dsteiger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 16:21:07 by dsteiger          #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2025/08/29 16:37:55 by scarlos-         ###   ########.fr       */
+=======
+/*   Updated: 2025/08/29 17:00:12 by dsteiger         ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +64,23 @@ typedef struct s_map
 
 typedef struct s_data //images
 {
+<<<<<<< Updated upstream
 	//void		*mlx;
 	//void		*mlx_win;
 	t_map		*pmap;
 	int			start[2];
+=======
+	void		*mlx;
+	void		*mlx_win;
+	t_map		*map;
+>>>>>>> Stashed changes
 }	t_data;
 
+
+
+// error_exit/exit.c
+void	clean_exit(t_data *data, int exit_code);
+int	err_msg(char *msg, char *str, int exit_code);
 
 // init/init.c
 int		init_map(t_map *map);
@@ -85,6 +100,10 @@ int	dupmap(t_data *data);
 //utils
 void free_data(t_data *data);
 void print_map(t_data *data);
+
+
+
+
 
 
 #endif

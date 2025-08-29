@@ -6,8 +6,17 @@ NAME = cub3D
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g3
 
+<<<<<<< Updated upstream
 SRC = src/main.c src/parsing/check_map.c src/parsing/create_map.c src/init/init.c \
 	src/utils.c
+=======
+SRC = src/main.c /
+src/parsing/check_map.c /
+src/init/init.c /
+src/init/init_mlx.c /
+src/error_exit/exit.c
+
+>>>>>>> Stashed changes
 OBJ_DIR = objects
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
