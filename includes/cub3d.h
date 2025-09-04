@@ -55,6 +55,7 @@
 
 typedef struct s_player
 {
+	int players;
 	int pos_x;
 	int pos_y;
 	
