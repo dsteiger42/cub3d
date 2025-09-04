@@ -51,15 +51,11 @@ int init_data_structures(t_data *data)
 	data->mlx_win = NULL;
 	data->pmap = malloc(sizeof(t_map));
 	if (!data->pmap)
-	{
-		write(2, "\033[91mERROR\nMemory allocation failed\n", 36);
-		return (1);
-	}
+		return (err_msg("Memory allocation failed\n", 1), -1);
 	if (init_player(&data->player) == -1)
 	{
 		free(data->pmap);
-		write(2, "\033[91mERROR\nPlayer initialization failed\n", 39);
-		return 1;
+		return (err_msg("Player initialization failed\n", 1), -1);
 	}
 	if (init_map(data->pmap) == -1)
 	{

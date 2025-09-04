@@ -44,6 +44,21 @@ int validfd(t_map *map, char *file)
 	}
 	return (0);
 }
+static int	handle_player_start(t_data *data, char c, int x, int y, int *count)
+{
+	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+	{
+		(*count)++;
+		data->player.pos_x = x;
+		data->player.pos_y = y;
+		if (*count > 1)
+		{
+			write(2, "\033[91mERROR\nMultipleasdaad start positions\n", 36);
+			return (-1);
+		}
+	}
+	return (0);
+}
 
 int valid_map(t_data *data, char *file)
 {
@@ -67,28 +82,11 @@ int valid_map(t_data *data, char *file)
         while (line[pos_x])
         {
             c = line[pos_x];
-            //if (!ft_strchr("01NSEW \t\v\r\f\n", c)) outra maneira de escrever
-            if (c != '0' && c != '1' && c != ' ' && c != '\t' && c != '\v' && c != '\r' && c != '\f' && c != '\n' &&
-				c != 'N' && c != 'S' && c != 'E' && c != 'W' )
-            {
-                free(line);
-                write(2, "\033[91mERROR\nInvalid character\n", 30);
-                close(fd);
-                return -1;
-            }
-            if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-            {
-                start_count++;
-                data->player.pos_x = pos_x;
-                data->player.pos_y = pos_y;
-                if (start_count > 1)
-                {
-                    free(line);
-                    write(2, "\033[91mERROR\nMultiple start positions\n", 36);
-                    close(fd);
-                    return -1;
-                }
-            }
+            /(!ft_strchr("01NSEW \t\v\r\f\n", c))
+                return (free(line), close(fd),
+					err_msg("Invalid character\n", 1), -1);
+			if (handle_player_start(data, line[pos_x], pos_x, pos_y, &start_count) == -1)
+				return (free(line), close(fd), -1);
             pos_x++;
         }
         free(line);

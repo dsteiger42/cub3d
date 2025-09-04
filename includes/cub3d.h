@@ -71,6 +71,7 @@ typedef struct s_data //images
 {
 	void		*mlx;
 	void		*mlx_win;
+	void		*img;
 	t_player	player;
 	t_map		*pmap;
 }	t_data;

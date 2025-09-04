@@ -52,8 +52,6 @@ void init_mlx(t_data *data)
 		exit(1);
 
 	data->img = mlx_new_image(data->mlx, 960, 720);
-
-
 	mlx_hook(data->mlx_win, 2, 1L<<0, ft_keyhook, data); // teclado
 	mlx_hook(data->mlx_win, 17, 0, close_window, data);   // X da janela
 
