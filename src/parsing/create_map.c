@@ -12,27 +12,23 @@
 
 #include "../includes/cub3d.h"
 
-int	allocmap(t_data *data, char *av)
+int	allocmap(t_data *data, char *file)
 {
 	int		fd;
 	int		i;
 	char	*line;
 
-	fd = open(av, O_RDONLY);
+	fd = open(file, O_RDONLY);
 	if (fd < 0)
-    {
-        write(2, "\033[91mERROR\nInvalid file\n", 25);
-        return (1);
-    }
+        return (err_msg("Invalid file\n", 1), -1);
 	data->pmap->map = malloc(sizeof(char *) * (data->pmap->line_count + 1));
 	if (!data->pmap->map)
-		return (1 * write(2, "\033[91mERROR\nMalloc Failed\n", 26));
+        return (err_msg("Malloc Failed\n", 1), -1);
 	i = 0;
 	while (i < data->pmap->line_count && (line = get_next_line(fd)))
 		data->pmap->map[i++] = line;
 	data->pmap->map[i] = NULL;
 	close(fd);
-
 	return (0);
 }
 int	dupmap(t_data *data)
@@ -65,13 +61,9 @@ int	dupmap(t_data *data)
 
 int ft_floodfill(char **map, int y, int x, int line_count)
 {
-    // verifica limites do mapa
     if (y < 0 || x < 0 || y >= line_count || !map[y] ||
 		x >= (int)ft_strlen(map[y]) || map[y][x] == ' ')
-	{
-		printf("mapa aberto\n");
-		return 1;
-	}
+        return (err_msg("Map is not closed\n", 1), -1);  
     if (map[y][x] == '1')
         return 0;
     map[y][x] = '1';
@@ -88,15 +80,12 @@ int ft_floodfill(char **map, int y, int x, int line_count)
 
 int	create_map(t_data *data,char *av)
 {
-		if (allocmap(data, av))
-			return (1);
-		if (dupmap(data))
-			return (1);
-		if (ft_floodfill(data->pmap->map2, data->player.pos_x, data->player.pos_y, data->pmap->line_count))
-		{
-			return (1);
-		}
-		printf("y = %d\nx = %d\n", data->player.pos_x, data->player.pos_y);
-		print_map(data);
-		return 0;
+    if (allocmap(data, av))
+    return (1);
+    if (dupmap(data))
+    return (1);
+    if (ft_floodfill(data->pmap->map2, data->player.pos_y, data->player.pos_x, data->pmap->line_count))
+    return (1);
+    print_map(data);
+    return 0;
 }

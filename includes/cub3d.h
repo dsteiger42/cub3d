@@ -55,9 +55,9 @@
 
 typedef struct s_player
 {
-	int players;
-	int pos_x;
-	int pos_y;
+	double players;
+	double pos_x;
+	double pos_y;
 	
 }	t_player;
 
@@ -68,6 +68,22 @@ typedef struct s_map
 	int		line_count;
 }	t_map;
 
+typedef struct s_config
+{
+    char    *no;
+    char    *so;
+    char    *we;
+    char    *ea;
+    int     floor[3];   // RGB
+    int     ceiling[3]; // RGB
+    int     got_no;
+    int     got_so;
+    int     got_we;
+    int     got_ea;
+    int     got_f;
+    int     got_c;
+}   t_config;
+
 typedef struct s_data //images
 {
 	void		*mlx;
@@ -75,6 +91,7 @@ typedef struct s_data //images
 	void		*img;
 	t_player	player;
 	t_map		*pmap;
+	t_config	*config;
 }	t_data;
 
 //error_exit/exit.c

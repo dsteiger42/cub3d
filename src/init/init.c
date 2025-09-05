@@ -26,6 +26,7 @@ int init_player(t_player *player)
 {
 	if (!player)
 		return (-1);
+	player->players = 0;
 	player->pos_x = -1;
 	player->pos_y = -1;
 	return (0);
@@ -60,8 +61,7 @@ int init_data_structures(t_data *data)
 	if (init_map(data->pmap) == -1)
 	{
 		free(data->pmap);
-		write(2, "\033[91mERROR\nMap initialization failed\n", 36);
-		return (1);
+		return (err_msg("Map initialization failed\n", 1), -1);
 	}
 	return (0);
 }

@@ -12,21 +12,20 @@
 
 #include "../includes/cub3d.h"
 
-int init_and_validate(t_data *data, char *filename)
+int init_and_validate(t_data *data, char *file)
 {
-    if (!data || !filename)
+    if (!data || !file)
 		return 1;
 	if(init_data_structures(data))
 		return (1);
-    if (valid_map_name(filename))
+    if (valid_map_name(file))
         return 1;
-    if (validfd(data->pmap, filename))
+    if (validfd(data->pmap, file))
         return 1;
-    if (valid_map(data, filename))
+    if (valid_map(data, file))
         return 1;
-    if (create_map(data, filename))
+    if (create_map(data, file))
         return 1;
-
     return 0;
 }
 
