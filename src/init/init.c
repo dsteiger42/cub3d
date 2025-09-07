@@ -42,34 +42,21 @@ int init_map(t_map *pmap)
 	return (0);
 }
 
-int init_config_map(t_config **cfg)
+int init_config_map(t_config **config_map)
 {
-    if (!cfg)
+    if (!config_map)
         return (-1);
-    *cfg = malloc(sizeof(t_config));
-    if (!*cfg)
+    *config_map = malloc(sizeof(t_config));
+
+    if (!*config_map)
         return (err_msg("Memory allocation failed for config_map\n", 1), -1);
-
-    (*cfg)->no = NULL;
-    (*cfg)->so = NULL;
-    (*cfg)->we = NULL;
-    (*cfg)->ea = NULL;
-
-    (*cfg)->floor[0] = 0;
-    (*cfg)->floor[1] = 0;
-    (*cfg)->floor[2] = 0;
-
-    (*cfg)->ceiling[0] = 0;
-    (*cfg)->ceiling[1] = 0;
-    (*cfg)->ceiling[2] = 0;
-
-    (*cfg)->got_no = 0;
-    (*cfg)->got_so = 0;
-    (*cfg)->got_we = 0;
-    (*cfg)->got_ea = 0;
-    (*cfg)->got_f = 0;
-    (*cfg)->got_c = 0;
-
+	
+    (*config_map)->no = NULL;
+	(*config_map)->so = NULL;
+	(*config_map)->we = NULL;
+	(*config_map)->ea = NULL;
+	(*config_map)->floor[0] = 0;
+	(*config_map)->ceiling[0] = 0;
     return 0;
 }
 

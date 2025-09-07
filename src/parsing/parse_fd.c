@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_fd.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yourlogin <youremail@student.42.fr>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/07 14:20:00 by yourlogin         #+#    #+#             */
-/*   Updated: 2025/09/07 14:20:00 by yourlogin        ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/cub3d.h"
 
 static int open_and_check(char *path)
@@ -23,13 +11,6 @@ static int open_and_check(char *path)
     return (0);
 }
 
-#include <stdlib.h>
-#include "../includes/cub3d.h"
-
-/*
- * Realloca o array de linhas do mapa para armazenar uma nova linha.
- * new_size é o número de linhas atuais (antes de adicionar a nova).
- */
 char	**ft_realloc(char **map, int new_size)
 {
 	char	**new_map;
@@ -62,57 +43,64 @@ static int parse_texture(t_config *config_map, char *id, char *path)
     if (!trim)
         return (err_msg("Malloc failed\n", 1), -1);
 
-    if (!ft_strncmp(id, "NO", 2) && !config_map->got_no)
+    if (!ft_strncmp(id, "NO", 2))
     {
+        if (config_map->no)
+            return free(trim), err_msg("Duplicate texture NO\n", 1), -1;
         config_map->no = trim;
-        config_map->got_no = 1;
     }
-    else if (!ft_strncmp(id, "SO", 2) && !config_map->got_so)
+    else if (!ft_strncmp(id, "SO", 2))
     {
+        if (config_map->so)
+            return free(trim), err_msg("Duplicate texture SO\n", 1), -1;
         config_map->so = trim;
-        config_map->got_so = 1;
     }
-    else if (!ft_strncmp(id, "WE", 2) && !config_map->got_we)
+    else if (!ft_strncmp(id, "WE", 2))
     {
+        if (config_map->we)
+            return free(trim), err_msg("Duplicate texture WE\n", 1), -1;
         config_map->we = trim;
-        config_map->got_we = 1;
     }
-    else if (!ft_strncmp(id, "EA", 2) && !config_map->got_ea)
+    else if (!ft_strncmp(id, "EA", 2))
     {
+        if (config_map->ea)
+            return free(trim), err_msg("Duplicate texture EA\n", 1), -1;
         config_map->ea = trim;
-        config_map->got_ea = 1;
     }
     else
-        return (free(trim), err_msg("Duplicate or invalid texture\n", 1), -1);
+        return free(trim), err_msg("Invalid texture ID\n", 1), -1;
 
     return open_and_check(trim);
 }
 
-
-static int	parse_color_line(int *arr, char *line, int *got_flag)
+static int parse_color_line(int *arr, char *line)
 {
-	char	**split;
-	int		i;
+    char **split;
+    int i;
 
-	if (*got_flag)
-		return (err_msg("Duplicate color definition\n", 1), -1);
-	split = ft_split(line, ',');
-	if (!split)
-		return (err_msg("Malloc failed\n", 1), -1);
-	i = 0;
-	while (split[i])
-	{
-		arr[i] = ft_atoi(split[i]);
-		if (arr[i] < 0 || arr[i] > 255)
-			return (ft_free_split(split), err_msg("Invalid RGB\n", 1), -1);
-		i++;
-	}
-	ft_free_split(split);
-	if (i != 3)
-		return (err_msg("RGB needs 3 values\n", 1), -1);
-	*got_flag = 1;
-	return (0);
+    // verifica se já foi definido
+    if (arr[0])
+        return err_msg("Duplicate color definition\n", 1), -1;
+
+    split = ft_split(line, ',');
+    if (!split)
+        return err_msg("Malloc failed\n", 1), -1;
+
+    i = 0;
+    while (split[i])
+    {
+        arr[i] = ft_atoi(split[i]);
+        if (arr[i] < 0 || arr[i] > 255)
+            return ft_free_split(split), err_msg("Invalid RGB\n", 1), -1;
+        i++;
+    }
+    ft_free_split(split);
+    if (i != 3)
+        return err_msg("RGB needs 3 values\n", 1), -1;
+
+    return 0;
 }
+
 
 static int parse_header_line(t_config *config_map, char *line)
 {
@@ -125,12 +113,13 @@ static int parse_header_line(t_config *config_map, char *line)
     if (!ft_strncmp(line, "EA ", 3))
         return parse_texture(config_map, "EA", line + 3);
     if (!ft_strncmp(line, "F ", 2))
-        return parse_color_line(config_map->floor, line + 2, &config_map->got_f);
+        return parse_color_line(config_map->floor, line + 2);
     if (!ft_strncmp(line, "C ", 2))
-        return parse_color_line(config_map->ceiling, line + 2, &config_map->got_c);
+        return parse_color_line(config_map->ceiling, line + 2);
 
     return 0;
 }
+
 
 static int	valid_char(char *line)
 {
@@ -151,19 +140,15 @@ static int	parse_map_lines(t_data *data, int fd, char *first_line)
 	char	*line;
 	int		i;
 
-	// Inicializa map com a primeira linha
 	data->pmap->line_count = 1;
-	data->pmap->map = malloc(sizeof(char *) * 2); // primeira linha + NULL
+	data->pmap->map = malloc(sizeof(char *) * 2); 
 	if (!data->pmap->map)
 		return (err_msg("Malloc failed\n", 1), -1);
 
 	if (valid_char(first_line) == -1)
 		return (-1);
-
 	data->pmap->map[0] = first_line;
 	data->pmap->map[1] = NULL;
-
-
 	while ((line = get_next_line(fd)))
 	{
 		if (valid_char(line) == -1)
@@ -180,11 +165,8 @@ static int	parse_map_lines(t_data *data, int fd, char *first_line)
 		data->pmap->line_count++;
 		data->pmap->map[data->pmap->line_count] = NULL;
 	}
-
 	return (0);
 }
-
-
 
 int parse_file(t_data *data, char *file)
 {
@@ -203,9 +185,9 @@ int parse_file(t_data *data, char *file)
             free(line);
             continue;
         }
-        if (!data->config_map->got_no || !data->config_map->got_so ||
-            !data->config_map->got_we || !data->config_map->got_ea ||
-            !data->config_map->got_f  || !data->config_map->got_c)
+        if (!data->config_map->no || !data->config_map->so ||
+            !data->config_map->we || !data->config_map->ea ||
+            data->config_map->floor[0] == -1 || data->config_map->ceiling[0] == -1)
         {
             if (parse_header_line(data->config_map, line) == -1)
                 return (free(line), close(fd), -1);

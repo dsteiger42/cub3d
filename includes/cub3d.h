@@ -70,19 +70,14 @@ typedef struct s_map
 
 typedef struct s_config
 {
-    char    *no;
-    char    *so;
-    char    *we;
-    char    *ea;
-    int     floor[3];   // RGB
-    int     ceiling[3]; // RGB
-    int     got_no;
-    int     got_so;
-    int     got_we;
-    int     got_ea;
-    int     got_f;
-    int     got_c;
-}   t_config;
+    char *no;
+    char *so;
+    char *we;
+    char *ea;
+    int floor[3];
+    int ceiling[3]; 
+} t_config;
+
 
 typedef struct s_data //images
 {

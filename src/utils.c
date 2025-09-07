@@ -96,10 +96,10 @@ void print_config_map(t_config *cfg)
     printf("SO texture: %s\n", cfg->so ? cfg->so : "(null)");
     printf("WE texture: %s\n", cfg->we ? cfg->we : "(null)");
     printf("EA texture: %s\n", cfg->ea ? cfg->ea : "(null)");
-    printf("Floor color: R=%d G=%d B=%d (got_f=%d)\n",
-           cfg->floor[0], cfg->floor[1], cfg->floor[2], cfg->got_f);
-    printf("Ceiling color: R=%d G=%d B=%d (got_c=%d)\n",
-           cfg->ceiling[0], cfg->ceiling[1], cfg->ceiling[2], cfg->got_c);
+    printf("Floor color: R=%d G=%d B=%d\n",
+           cfg->floor[0], cfg->floor[1], cfg->floor[2]);
+    printf("Ceiling color: R=%d G=%d B=%d\n",
+           cfg->ceiling[0], cfg->ceiling[1], cfg->ceiling[2]);
     printf("=================\n");
 }
 
