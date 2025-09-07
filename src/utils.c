@@ -27,6 +27,21 @@ void print_map(t_data *data)
     }
 }
 
+void	ft_free_split(char **split)
+{
+	int	i;
+
+	if (!split)
+		return ;
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
+
 static void free_map(char **map, int line_count)
 {
     int i;
@@ -71,6 +86,22 @@ void free_mlx(t_data *data)
     data->mlx = NULL;
 }
 
+void print_config_map(t_config *cfg)
+{
+    if (!cfg)
+        return;
+
+    printf("=== CONFIG MAP ===\n");
+    printf("NO texture: %s\n", cfg->no ? cfg->no : "(null)");
+    printf("SO texture: %s\n", cfg->so ? cfg->so : "(null)");
+    printf("WE texture: %s\n", cfg->we ? cfg->we : "(null)");
+    printf("EA texture: %s\n", cfg->ea ? cfg->ea : "(null)");
+    printf("Floor color: R=%d G=%d B=%d (got_f=%d)\n",
+           cfg->floor[0], cfg->floor[1], cfg->floor[2], cfg->got_f);
+    printf("Ceiling color: R=%d G=%d B=%d (got_c=%d)\n",
+           cfg->ceiling[0], cfg->ceiling[1], cfg->ceiling[2], cfg->got_c);
+    printf("=================\n");
+}
 
 void free_data(t_data *data)
 {

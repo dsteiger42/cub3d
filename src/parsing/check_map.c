@@ -60,43 +60,32 @@ static int	handle_player_start(t_data *data, char c, int x, int y)
 	}
 	return (0);
 }
-int valid_map(t_data *data, char *file)
-{
-    int fd;
-    char *line;
-    int pos_y;
-    int pos_x;
-    char c;
+#include "../includes/cub3d.h"
 
-	pos_y = 0;
-    fd = open(file, O_RDONLY);
-    if (fd < 0)
-    	return (err_msg("Invalid fd\n", 1), -1);
-    line = get_next_line(fd);
-    while (line)
-    {
-        pos_x = 0;
-        while (line[pos_x])
-        {
-            c = line[pos_x];
-            if (!ft_strchr("01NSEW \t\v\r\f\n", c))
-			{
-				free(line);
-				close(fd);
-				return (err_msg("Invalid character\n", 1), -1);
-			}
-			if(handle_player_start(data, line[pos_x], pos_x, pos_y) == -1)
-			{
-				free(line);
-				close(fd);
+int	valid_map(t_data *data)
+{
+	int		y;
+	int		x;
+	char	c;
+
+	if (!data || !data->pmap || !data->pmap->map)
+		return (err_msg("Map not loaded\n", 1), -1);
+
+	y = 0;
+	while (data->pmap->map[y])
+	{
+		x = 0;
+		while (data->pmap->map[y][x])
+		{
+			c = data->pmap->map[y][x];
+			if (!ft_strchr("01NSEW \t\v\r\f\n", c))
+				return (err_msg("Invalid character in map\n", 1), -1);
+			if (handle_player_start(data, c, x, y) == -1)
 				return (-1);
-			}
-            pos_x++;
-        }
-        free(line);
-        pos_y++;
-        line = get_next_line(fd);
-    }
-    close(fd);
-    return 0;
+			x++;
+		}
+		y++;
+	}
+	return (0);
 }
+

@@ -42,26 +42,58 @@ int init_map(t_map *pmap)
 	return (0);
 }
 
+int init_config_map(t_config **cfg)
+{
+    if (!cfg)
+        return (-1);
+    *cfg = malloc(sizeof(t_config));
+    if (!*cfg)
+        return (err_msg("Memory allocation failed for config_map\n", 1), -1);
+
+    (*cfg)->no = NULL;
+    (*cfg)->so = NULL;
+    (*cfg)->we = NULL;
+    (*cfg)->ea = NULL;
+
+    (*cfg)->floor[0] = 0;
+    (*cfg)->floor[1] = 0;
+    (*cfg)->floor[2] = 0;
+
+    (*cfg)->ceiling[0] = 0;
+    (*cfg)->ceiling[1] = 0;
+    (*cfg)->ceiling[2] = 0;
+
+    (*cfg)->got_no = 0;
+    (*cfg)->got_so = 0;
+    (*cfg)->got_we = 0;
+    (*cfg)->got_ea = 0;
+    (*cfg)->got_f = 0;
+    (*cfg)->got_c = 0;
+
+    return 0;
+}
+
 int init_data_structures(t_data *data)
 {
-	
-	if (!data)
-		return (-1);
+    if (!data)
+        return (-1);
 
-	data->mlx = NULL;
-	data->mlx_win = NULL;
-	data->pmap = malloc(sizeof(t_map));
-	if (!data->pmap)
-		return (err_msg("Memory allocation failed\n", 1), -1);
-	if (init_player(&data->player) == -1)
-	{
-		free(data->pmap);
-		return (err_msg("Player initialization failed\n", 1), -1);
-	}
-	if (init_map(data->pmap) == -1)
-	{
-		free(data->pmap);
-		return (err_msg("Map initialization failed\n", 1), -1);
-	}
-	return (0);
+    data->mlx = NULL;
+    data->mlx_win = NULL;
+
+    data->pmap = malloc(sizeof(t_map));
+    if (!data->pmap)
+        return (err_msg("Memory allocation failed\n", 1), -1);
+    if (init_player(&data->player) == -1)
+        return (free(data->pmap), err_msg("Player init failed\n", 1), -1);
+    if (init_map(data->pmap) == -1)
+        return (free(data->pmap), err_msg("Map init failed\n", 1), -1);
+
+    if (init_config_map(&data->config_map) == -1)
+    {
+        free(data->pmap);
+        return (-1);
+    }
+
+    return 0;
 }

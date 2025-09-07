@@ -15,17 +15,19 @@
 int init_and_validate(t_data *data, char *file)
 {
     if (!data || !file)
-		return 1;
+		return (1);
 	if(init_data_structures(data))
 		return (1);
-    if (valid_map_name(file))
-        return 1;
-    if (validfd(data->pmap, file))
-        return 1;
-    if (valid_map(data, file))
-        return 1;
-    if (create_map(data, file))
-        return 1;
+	if (valid_map_name(file))
+        return (1);
+	if (validfd(data->pmap, file))
+		return (1);
+	if (parse_file(data, file))
+		return (1);
+    if (valid_map(data))
+    	return (1);
+    if (create_map(data))
+        return (1);
     return 0;
 }
 

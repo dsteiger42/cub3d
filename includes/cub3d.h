@@ -89,14 +89,15 @@ typedef struct s_data //images
 	void		*mlx;
 	void		*mlx_win;
 	void		*img;
+    char        *map_file;
 	t_player	player;
 	t_map		*pmap;
-	t_config	*config;
+	t_config	*config_map;
 }	t_data;
 
 //error_exit/exit.c
 void	clean_exit(t_data *data, int exit_code);
-int	err_msg(char *msg, int exit_code);
+int     err_msg(char *msg, int exit_code);
 
 
 
@@ -104,22 +105,26 @@ int	err_msg(char *msg, int exit_code);
 void	init_mlx(t_data *data);
 int		init_map(t_map *map);
 int		init_data_structures(t_data *data);
+int     init_config_map(t_config **cfg);
 
 //parsing/check_map.c
-int valid_map_name(char *av);
-int validfd(t_map *map, char *file);
-int valid_map(t_data *data, char *file);
+int     valid_map_name(char *av);
+int     validfd(t_map *map, char *file);
+int     valid_map(t_data *data);
 
 //parsing/create_map.c
-int	create_map(t_data *data,char *av);
-int	allocmap(t_data *data, char *av);
-int	dupmap(t_data *data);
+int	    create_map(t_data *data);
+//int	    allocmap(t_data *data, char *av);
+int	    dupmap(t_data *data);
 
 //utils
-void free_data(t_data *data);
-void print_map(t_data *data);
+void    free_data(t_data *data);
+void    print_map(t_data *data);
+void    ft_free_split(char **split);
+void    print_config_map(t_config *cfg);
 
-
+//parsing/parse_fd.c
+int         parse_file(t_data *data, char *file);
 
 
 

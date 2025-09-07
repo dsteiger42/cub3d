@@ -5,6 +5,7 @@ CFLAGS = -Wall -Wextra -Werror -g3
 SRC = src/main.c \
 	src/parsing/check_map.c \
 	src/parsing/create_map.c \
+	src/parsing/parse_fd.c \
 	src/init/init.c \
 	src/error_exit/exit.c \
 	src/utils.c

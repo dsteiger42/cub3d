@@ -12,25 +12,6 @@
 
 #include "../includes/cub3d.h"
 
-int	allocmap(t_data *data, char *file)
-{
-	int		fd;
-	int		i;
-	char	*line;
-
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-        return (err_msg("Invalid file\n", 1), -1);
-	data->pmap->map = malloc(sizeof(char *) * (data->pmap->line_count + 1));
-	if (!data->pmap->map)
-        return (err_msg("Malloc Failed\n", 1), -1);
-	i = 0;
-	while (i < data->pmap->line_count && (line = get_next_line(fd)))
-		data->pmap->map[i++] = line;
-	data->pmap->map[i] = NULL;
-	close(fd);
-	return (0);
-}
 int	dupmap(t_data *data)
 {
     int i;
@@ -78,10 +59,8 @@ int ft_floodfill(char **map, int y, int x, int line_count)
     return 0;
 }
 
-int	create_map(t_data *data,char *av)
+int	create_map(t_data *data)
 {
-    if (allocmap(data, av))
-    return (1);
     if (dupmap(data))
     return (1);
     if (ft_floodfill(data->pmap->map2, data->player.pos_y, data->player.pos_x, data->pmap->line_count))
