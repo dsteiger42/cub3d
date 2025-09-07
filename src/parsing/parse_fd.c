@@ -116,6 +116,8 @@ static int parse_header_line(t_config *config_map, char *line)
         return parse_color_line(config_map->floor, line + 2);
     if (!ft_strncmp(line, "C ", 2))
         return parse_color_line(config_map->ceiling, line + 2);
+    else
+        return 1;
 
     return 0;
 }
@@ -178,26 +180,33 @@ int parse_file(t_data *data, char *file)
     if (fd < 0)
         return (err_msg("Invalid fd\n", 1), -1);
 
-    while ((line = get_next_line(fd)))
+while ((line = get_next_line(fd)))
+{
+    if (line[0] == '\n' || line[0] == '\0')
     {
-        if (line[0] == '\n' || line[0] == '\0')
-        {
-            free(line);
-            continue;
-        }
-        if (!data->config_map->no || !data->config_map->so ||
-            !data->config_map->we || !data->config_map->ea ||
-            data->config_map->floor[0] == -1 || data->config_map->ceiling[0] == -1)
-        {
-            if (parse_header_line(data->config_map, line) == -1)
-                return (free(line), close(fd), -1);
-            free(line);
-            continue;
-        }
-        first_map_line = line;
-        print_config_map(data->config_map);
-        break;
+        free(line);
+        continue;
     }
+    if (!data->config_map->no || !data->config_map->so ||
+        !data->config_map->we || !data->config_map->ea ||
+        !data->config_map->floor[0] || !data->config_map->ceiling[0])
+    {
+        if (parse_header_line(data->config_map, line) == 0)
+        {
+            free(line);
+            continue;
+        }
+        else
+        {
+            free(line);
+            close(fd);
+            return (err_msg("Invalid header\n", 1), -1);
+        }
+    }
+    first_map_line = line;
+    print_config_map(data->config_map);
+    break;
+}
     if (!first_map_line)
         return (close(fd), err_msg("No map found\n", 1), -1);
     if (parse_map_lines(data, fd, first_map_line) == -1)

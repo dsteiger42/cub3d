@@ -114,12 +114,12 @@ int	    dupmap(t_data *data);
 
 //utils
 void    free_data(t_data *data);
-void    print_map(t_data *data);
+void	print_map(char **map, int line_count);
 void    ft_free_split(char **split);
 void    print_config_map(t_config *cfg);
 
 //parsing/parse_fd.c
-int         parse_file(t_data *data, char *file);
+int        parse_file(t_data *data, char *file);
 
 
 

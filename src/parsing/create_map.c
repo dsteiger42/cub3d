@@ -65,6 +65,6 @@ int	create_map(t_data *data)
     return (1);
     if (ft_floodfill(data->pmap->map2, data->player.pos_y, data->player.pos_x, data->pmap->line_count))
     return (1);
-    print_map(data);
+    print_map(data->pmap->map2, data->pmap->line_count);
     return 0;
 }

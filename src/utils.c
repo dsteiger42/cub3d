@@ -12,20 +12,7 @@
 
 #include "../includes/cub3d.h"
 
-void print_map(t_data *data)
-{
-    int i;
 
-    if (!data || !data->pmap || !data->pmap->map)
-        return;
-
-    i = 0;
-    while (i < data->pmap->line_count)
-    {
-        printf("%s", data->pmap->map2[i]);
-        i++;
-    }
-}
 
 void	ft_free_split(char **split)
 {
@@ -42,7 +29,24 @@ void	ft_free_split(char **split)
 	free(split);
 }
 
-static void free_map(char **map, int line_count)
+
+void print_map(char **map, int line_count)
+{
+    int i;
+
+    if (!map || line_count <= 0)
+        return;
+
+    i = 0;
+    printf("=== MAP ===\n");
+    while (i < line_count)
+    {
+        printf("%s", map[i]);
+        i++;
+    }
+}
+
+void free_map(char **map, int line_count)
 {
     int i;
 
@@ -58,21 +62,6 @@ static void free_map(char **map, int line_count)
     free(map);
 }
 
-static void free_map2(char **map2, int line_count)
-{
-    int i;
-
-    if (!map2 || line_count <= 0)
-        return;
-
-    i = 0;
-    while (i < line_count)
-    {
-        free(map2[i]);
-        i++;
-    }
-    free(map2);
-}
 void free_mlx(t_data *data)
 {
     if (!data || !data->mlx)
@@ -103,19 +92,39 @@ void print_config_map(t_config *cfg)
     printf("=================\n");
 }
 
-void free_data(t_data *data)
+void    free_config_map(t_config *config_map)
 {
-    if (!data || !data->pmap)
+    if (!config_map)
         return;
 
-    free_map(data->pmap->map, data->pmap->line_count);
-    data->pmap->map = NULL;
-
-    free_map2(data->pmap->map2, data->pmap->line_count);
-    data->pmap->map2 = NULL;
-
-	//free_mlx(data);
-
-    free(data->pmap);
-    data->pmap = NULL;
+    free(config_map->no);
+    free(config_map->so);
+    free(config_map->we);
+    free(config_map->ea);
+    free(config_map);
 }
+
+void free_data(t_data *data)
+{
+    if (!data)
+        return;
+    if (data->pmap) 
+    {
+        free_map(data->pmap->map, data->pmap->line_count);
+        free_map(data->pmap->map2, data->pmap->line_count);
+        free(data->pmap);
+        data->pmap = NULL;
+    }
+    if (data->config_map)
+        free_config_map(data->config_map);
+    if (data->img)
+        mlx_destroy_image(data->mlx, data->img);
+    if (data->mlx_win)
+        mlx_destroy_window(data->mlx, data->mlx_win);
+    if (data->mlx) 
+    {
+        mlx_destroy_display(data->mlx);
+        free(data->mlx);
+    }
+}
+
