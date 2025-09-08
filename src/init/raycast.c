@@ -1,5 +1,9 @@
 #include "../includes/cub3d.h"
 
+// RAYCAST AINDA NAO FUNCIONA, 
+// FIZ ISSO AQUI NO CHAT GPT, SÓ PRA TER UMA IDEIA DO QUE PRECISAMOS
+// COLOCAR NAS ESTRUTURAS...
+
 
 static void put_pixel(t_data *data, int x, int y, int color)
 {
