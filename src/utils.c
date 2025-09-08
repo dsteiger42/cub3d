@@ -45,22 +45,66 @@ void print_map(char **map, int line_count)
         i++;
     }
 }
-
-void free_map(char **map, int line_count)
+void free_map_and_textures(t_map *pmap)
 {
     int i;
 
-    if (!map || line_count <= 0)
-        return;
+    if (!pmap)
+        return ;
 
-    i = 0;
-    while (i < line_count)
+    // libera map
+    if (pmap->map)
     {
-        free(map[i]);
-        i++;
+        i = 0;
+        while (i < pmap->line_count && pmap->map[i])
+        {
+            free(pmap->map[i]);
+            i++;
+        }
+        free(pmap->map);
+        pmap->map = NULL;
     }
-    free(map);
+
+    // libera map2
+    if (pmap->map2)
+    {
+        i = 0;
+        while (i < pmap->line_count && pmap->map2[i])
+        {
+            free(pmap->map2[i]);
+            i++;
+        }
+        free(pmap->map2);
+        pmap->map2 = NULL;
+    }
+
+    // libera as texturas (paths)
+    if (pmap->no)
+    {
+        free(pmap->no);
+        pmap->no = NULL;
+    }
+    if (pmap->so)
+    {
+        free(pmap->so);
+        pmap->so = NULL;
+    }
+    if (pmap->we)
+    {
+        free(pmap->we);
+        pmap->we = NULL;
+    }
+    if (pmap->ea)
+    {
+        free(pmap->ea);
+        pmap->ea = NULL;
+    }
+
+    // opcional: zerar contadores
+    pmap->line_count = 0;
 }
+
+
 
 void free_mlx(t_data *data)
 {
@@ -75,56 +119,78 @@ void free_mlx(t_data *data)
     data->mlx = NULL;
 }
 
-void print_config_map(t_config *cfg)
+void print_config_map(t_map *pmap)
 {
-    if (!cfg)
+    if (!pmap)
         return;
 
     printf("=== CONFIG MAP ===\n");
-    printf("NO texture: %s\n", cfg->no ? cfg->no : "(null)");
-    printf("SO texture: %s\n", cfg->so ? cfg->so : "(null)");
-    printf("WE texture: %s\n", cfg->we ? cfg->we : "(null)");
-    printf("EA texture: %s\n", cfg->ea ? cfg->ea : "(null)");
+    printf("NO texture: %s\n", pmap->no ? pmap->no : "(null)");
+    printf("SO texture: %s\n", pmap->so ? pmap->so : "(null)");
+    printf("WE texture: %s\n", pmap->we ? pmap->we : "(null)");
+    printf("EA texture: %s\n", pmap->ea ? pmap->ea : "(null)");
     printf("Floor color: R=%d G=%d B=%d\n",
-           cfg->floor[0], cfg->floor[1], cfg->floor[2]);
+           pmap->floor[0], pmap->floor[1], pmap->floor[2]);
     printf("Ceiling color: R=%d G=%d B=%d\n",
-           cfg->ceiling[0], cfg->ceiling[1], cfg->ceiling[2]);
+           pmap->ceiling[0], pmap->ceiling[1], pmap->ceiling[2]);
     printf("=================\n");
 }
 
-void    free_config_map(t_config *config_map)
+void    free_config_map(t_map *pmap)
 {
-    if (!config_map)
+    if (!pmap)
         return;
 
-    free(config_map->no);
-    free(config_map->so);
-    free(config_map->we);
-    free(config_map->ea);
-    free(config_map);
+    free(pmap->no);
+    free(pmap->so);
+    free(pmap->we);
+    free(pmap->ea);
+    free(pmap);
 }
 
 void free_data(t_data *data)
 {
     if (!data)
         return;
-    if (data->pmap) 
+
+    // libera mapa e texturas
+    if (data->pmap)
     {
-        free_map(data->pmap->map, data->pmap->line_count);
-        free_map(data->pmap->map2, data->pmap->line_count);
-        free(data->pmap);
+        free_map_and_textures(data->pmap); // libera map, map2 e paths
+        free(data->pmap);                   // libera a estrutura t_map
         data->pmap = NULL;
     }
-    if (data->config_map)
-        free_config_map(data->config_map);
-    if (data->img)
+
+    // libera imagem principal
+    if (data->img && data->mlx)
+    {
         mlx_destroy_image(data->mlx, data->img);
-    if (data->mlx_win)
+        data->img = NULL;
+    }
+
+    // destrói a janela
+    if (data->mlx_win && data->mlx)
+    {
         mlx_destroy_window(data->mlx, data->mlx_win);
-    if (data->mlx) 
+        data->mlx_win = NULL;
+    }
+
+    // finaliza a conexão com o display e libera o mlx
+    if (data->mlx)
     {
         mlx_destroy_display(data->mlx);
         free(data->mlx);
+        data->mlx = NULL;
     }
-}
 
+    // opcional: zerar outros campos do data
+    data->map_file = NULL;
+    data->player.pos_x = 0;
+    data->player.pos_y = 0;
+    data->player.dir_x = 0;
+    data->player.dir_y = 0;
+    data->player.plane_x = 0;
+    data->player.plane_y = 0;
+
+    // se você tiver outros ponteiros alocados, adiciona aqui
+}

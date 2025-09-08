@@ -12,21 +12,44 @@
 
 #include "../includes/cub3d.h"
 
+
+static void	free_textures(t_data *data)
+{
+	int	i;
+
+	if (!data)
+		return ;
+	i = 0;
+	while (i < 4)
+	{
+		if (data->textures[i].data)
+		{
+			free(data->textures[i].data);
+			data->textures[i].data = NULL;
+		}
+		i++;
+	}
+}
+
 void	clean_exit(t_data *data, int exit_code)
 {
 	if (!data)
 		exit(exit_code);
+	free_textures(data);
 	if (data->mlx_win && data->mlx)
 		mlx_destroy_window(data->mlx, data->mlx_win);
+
 	if (data->mlx)
 	{
 		mlx_destroy_display(data->mlx);
 		mlx_loop_end(data->mlx);
 		free(data->mlx);
 	}
+
 	free_data(data);
 	exit(exit_code);
 }
+
 
 int	err_msg(char *msg, int exit_code)
 {

@@ -1,5 +1,6 @@
 #include "../includes/cub3d.h"
 
+
 static int open_and_check(char *path)
 {
     int fd;
@@ -35,7 +36,7 @@ char	**ft_realloc(char **map, int new_size)
 }
 
 
-static int parse_texture(t_config *config_map, char *id, char *path)
+static int parse_texture(t_map *pmap, char *id, char *path)
 {
     char *trim;
 
@@ -45,27 +46,27 @@ static int parse_texture(t_config *config_map, char *id, char *path)
 
     if (!ft_strncmp(id, "NO", 2))
     {
-        if (config_map->no)
+        if (pmap->no)
             return free(trim), err_msg("Duplicate texture NO\n", 1), -1;
-        config_map->no = trim;
+        pmap->no = trim;
     }
     else if (!ft_strncmp(id, "SO", 2))
     {
-        if (config_map->so)
+        if (pmap->so)
             return free(trim), err_msg("Duplicate texture SO\n", 1), -1;
-        config_map->so = trim;
+        pmap->so = trim;
     }
     else if (!ft_strncmp(id, "WE", 2))
     {
-        if (config_map->we)
+        if (pmap->we)
             return free(trim), err_msg("Duplicate texture WE\n", 1), -1;
-        config_map->we = trim;
+        pmap->we = trim;
     }
     else if (!ft_strncmp(id, "EA", 2))
     {
-        if (config_map->ea)
+        if (pmap->ea)
             return free(trim), err_msg("Duplicate texture EA\n", 1), -1;
-        config_map->ea = trim;
+        pmap->ea = trim;
     }
     else
         return free(trim), err_msg("Invalid texture ID\n", 1), -1;
@@ -101,21 +102,20 @@ static int parse_color_line(int *arr, char *line)
     return 0;
 }
 
-
-static int parse_header_line(t_config *config_map, char *line)
+static int parse_header_line(t_map *pmap, char *line)
 {
     if (!ft_strncmp(line, "NO ", 3))
-        return parse_texture(config_map, "NO", line + 3);
+        return parse_texture(pmap, "NO", line + 3);
     if (!ft_strncmp(line, "SO ", 3))
-        return parse_texture(config_map, "SO", line + 3);
+        return parse_texture(pmap, "SO", line + 3);
     if (!ft_strncmp(line, "WE ", 3))
-        return parse_texture(config_map, "WE", line + 3);
+        return parse_texture(pmap, "WE", line + 3);
     if (!ft_strncmp(line, "EA ", 3))
-        return parse_texture(config_map, "EA", line + 3);
+        return parse_texture(pmap, "EA", line + 3);
     if (!ft_strncmp(line, "F ", 2))
-        return parse_color_line(config_map->floor, line + 2);
+        return parse_color_line(pmap->floor, line + 2);
     if (!ft_strncmp(line, "C ", 2))
-        return parse_color_line(config_map->ceiling, line + 2);
+        return parse_color_line(pmap->ceiling, line + 2);
     else
         return 1;
 
@@ -148,26 +148,37 @@ static int	parse_map_lines(t_data *data, int fd, char *first_line)
 		return (err_msg("Malloc failed\n", 1), -1);
 
 	if (valid_char(first_line) == -1)
-		return (-1);
+	{
+		free(first_line);
+		return -1;
+	}
 	data->pmap->map[0] = first_line;
 	data->pmap->map[1] = NULL;
+
 	while ((line = get_next_line(fd)))
 	{
 		if (valid_char(line) == -1)
 		{
 			free(line);
-			return (-1);
+			free_map_and_textures(data->pmap);
+			return -1;
 		}
+
 		i = data->pmap->line_count;
 		data->pmap->map = ft_realloc(data->pmap->map, i + 1);
 		if (!data->pmap->map)
-			return (free(line), err_msg("Malloc failed\n", 1), -1);
+		{
+			free(line);
+			free_map_and_textures(data->pmap);
+			return (err_msg("Malloc failed\n", 1), -1);
+		}
 
 		data->pmap->map[i] = line;
 		data->pmap->line_count++;
 		data->pmap->map[data->pmap->line_count] = NULL;
 	}
-	return (0);
+
+	return 0;
 }
 
 int parse_file(t_data *data, char *file)
@@ -187,11 +198,11 @@ while ((line = get_next_line(fd)))
         free(line);
         continue;
     }
-    if (!data->config_map->no || !data->config_map->so ||
-        !data->config_map->we || !data->config_map->ea ||
-        !data->config_map->floor[0] || !data->config_map->ceiling[0])
+    if (!data->pmap->no || !data->pmap->so ||
+        !data->pmap->we || !data->pmap->ea ||
+        !data->pmap->floor[0] || !data->pmap->ceiling[0])
     {
-        if (parse_header_line(data->config_map, line) == 0)
+        if (parse_header_line(data->pmap, line) == 0)
         {
             free(line);
             continue;
@@ -199,12 +210,13 @@ while ((line = get_next_line(fd)))
         else
         {
             free(line);
+            free_map_and_textures(data->pmap);
             close(fd);
             return (err_msg("Invalid header\n", 1), -1);
         }
     }
     first_map_line = line;
-    print_config_map(data->config_map);
+    print_config_map(data->pmap);
     break;
 }
     if (!first_map_line)

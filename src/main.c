@@ -23,19 +23,19 @@ static int open_and_check(char *path)
     return (0);
 }
 
-int valid_textures(t_config *config_map)
+int valid_textures(t_map *pmap)
 {
-	if (!config_map->no || !config_map->so ||
-		!config_map->we || !config_map->ea)
+	if (!pmap->no || !pmap->so ||
+		!pmap->we || !pmap->ea)
 		return (err_msg("Missing texture\n", 1), -1);
 
-	if (open_and_check(config_map->no) == -1)
+	if (open_and_check(pmap->no) == -1)
 		return (-1);
-	if (open_and_check(config_map->so) == -1)
+	if (open_and_check(pmap->so) == -1)
 		return (-1);
-	if (open_and_check(config_map->we) == -1)
+	if (open_and_check(pmap->we) == -1)
 		return (-1);
-	if (open_and_check(config_map->ea) == -1)
+	if (open_and_check(pmap->ea) == -1)
 		return (-1);
 	return (0);
 }
@@ -52,7 +52,7 @@ int init_and_validate(t_data *data, char *file)
 		return (1);
 	if (parse_file(data, file))
 		return (1);
-	if(valid_textures(data->config_map))
+	if(valid_textures(data->pmap))
 		return (1);
     if (valid_map(data))
     	return (1);
@@ -69,7 +69,6 @@ int main(int ac, char *av[])
 		return (err_msg("Wrong number of args\n", 1)), -1;
 	if(init_and_validate(&data, av[1]))
 		return (free_data(&data), -1);
-	print_map(data.pmap->map, data.pmap->line_count);
 	init_mlx(&data);
 	free_data(&data);
 	return (0);

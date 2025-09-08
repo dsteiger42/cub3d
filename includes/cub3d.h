@@ -58,6 +58,10 @@ typedef struct s_player
 	double players;
 	double pos_x;
 	double pos_y;
+	double dir_x;
+	double dir_y;
+	double plane_x;
+	double plane_y;
 	
 }	t_player;
 
@@ -66,29 +70,43 @@ typedef struct s_map
 	char	**map;
 	char	**map2;
 	int		line_count;
-}	t_map;
-
-typedef struct s_config
-{
     char *no;
     char *so;
     char *we;
     char *ea;
     int floor[3];
-    int ceiling[3]; 
-} t_config;
+    int ceiling[3];
+}	t_map;
 
-
-typedef struct s_data //images
+typedef struct s_img 
 {
-	void		*mlx;
-	void		*mlx_win;
-	void		*img;
+    void *img;
+    int *addr;
+    int pixel_bits;
+    int size_line;
+    int endian;
+} t_img;
+
+
+typedef struct s_texture 
+{
+    void *img;
+    int *data;
+    int width;
+    int height;
+} t_texture;
+
+typedef struct s_data
+{
+    void        *mlx;
+    void        *mlx_win;
+    void        *img;
     char        *map_file;
-	t_player	player;
-	t_map		*pmap;
-	t_config	*config_map;
-}	t_data;
+    t_player    player;
+    t_map       *pmap;
+    t_texture   textures[4]; // NO, SO, WE, EA
+}   t_data;
+
 
 //error_exit/exit.c
 void	clean_exit(t_data *data, int exit_code);
@@ -100,7 +118,7 @@ int     err_msg(char *msg, int exit_code);
 void	init_mlx(t_data *data);
 int		init_map(t_map *map);
 int		init_data_structures(t_data *data);
-int     init_config_map(t_config **cfg);
+int     init_config_map(t_map *pmap);
 
 //parsing/check_map.c
 int     valid_map_name(char *av);
@@ -116,12 +134,18 @@ int	    dupmap(t_data *data);
 void    free_data(t_data *data);
 void	print_map(char **map, int line_count);
 void    ft_free_split(char **split);
-void    print_config_map(t_config *cfg);
+void    print_config_map(t_map *pmap);
+void free_map_and_textures(t_map *pmap);
 
 //parsing/parse_fd.c
-int        parse_file(t_data *data, char *file);
+int     parse_file(t_data *data, char *file);
 
 
+//init/raycast.c
+void raycast(t_data *data);
+
+//init/init_textures.c
+int init_textures(t_data *data);
 
 
 #endif

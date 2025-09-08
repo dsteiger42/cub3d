@@ -7,6 +7,8 @@ SRC = src/main.c \
 	src/parsing/create_map.c \
 	src/parsing/parse_fd.c \
 	src/init/init.c \
+	src/init/init_textures.c \
+	src/init/raycast.c \
 	src/error_exit/exit.c \
 	src/utils.c
 
