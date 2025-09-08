@@ -50,17 +50,13 @@ void free_map_and_textures(t_map *pmap)
     int i;
 
     if (!pmap)
-        return ;
+        return;
 
     // libera map
     if (pmap->map)
     {
-        i = 0;
-        while (i < pmap->line_count && pmap->map[i])
-        {
+        for (i = 0; i < pmap->line_count && pmap->map[i]; i++)
             free(pmap->map[i]);
-            i++;
-        }
         free(pmap->map);
         pmap->map = NULL;
     }
@@ -68,40 +64,54 @@ void free_map_and_textures(t_map *pmap)
     // libera map2
     if (pmap->map2)
     {
-        i = 0;
-        while (i < pmap->line_count && pmap->map2[i])
-        {
+        for (i = 0; i < pmap->line_count && pmap->map2[i]; i++)
             free(pmap->map2[i]);
-            i++;
-        }
         free(pmap->map2);
         pmap->map2 = NULL;
     }
 
-    // libera as texturas (paths)
-    if (pmap->no)
+    // libera texturas (paths)
+    if (pmap->no) { free(pmap->no); pmap->no = NULL; }
+    if (pmap->so) { free(pmap->so); pmap->so = NULL; }
+    if (pmap->we) { free(pmap->we); pmap->we = NULL; }
+    if (pmap->ea) { free(pmap->ea); pmap->ea = NULL; }
+
+    pmap->line_count = 0;
+}
+
+void free_data(t_data *data)
+{
+    if (!data)
+        return;
+
+    // libera mapa e texturas
+    if (data->pmap)
     {
-        free(pmap->no);
-        pmap->no = NULL;
-    }
-    if (pmap->so)
-    {
-        free(pmap->so);
-        pmap->so = NULL;
-    }
-    if (pmap->we)
-    {
-        free(pmap->we);
-        pmap->we = NULL;
-    }
-    if (pmap->ea)
-    {
-        free(pmap->ea);
-        pmap->ea = NULL;
+        free_map_and_textures(data->pmap);
+        free(data->pmap);
+        data->pmap = NULL;
     }
 
-    // opcional: zerar contadores
-    pmap->line_count = 0;
+    // libera imagem
+    if (data->img && data->mlx)
+    {
+        mlx_destroy_image(data->mlx, data->img);
+        data->img = NULL;
+    }
+
+    // libera janela
+    if (data->mlx_win && data->mlx)
+    {
+        mlx_destroy_window(data->mlx, data->mlx_win);
+        data->mlx_win = NULL;
+    }
+
+    // destrói display e libera struct mlx
+    if (data->mlx)
+    {
+        free(data->mlx);
+        data->mlx = NULL;
+    }
 }
 
 
@@ -148,49 +158,4 @@ void    free_config_map(t_map *pmap)
     free(pmap);
 }
 
-void free_data(t_data *data)
-{
-    if (!data)
-        return;
 
-    // libera mapa e texturas
-    if (data->pmap)
-    {
-        free_map_and_textures(data->pmap); // libera map, map2 e paths
-        free(data->pmap);                   // libera a estrutura t_map
-        data->pmap = NULL;
-    }
-
-    // libera imagem principal
-    if (data->img && data->mlx)
-    {
-        mlx_destroy_image(data->mlx, data->img);
-        data->img = NULL;
-    }
-
-    // destrói a janela
-    if (data->mlx_win && data->mlx)
-    {
-        mlx_destroy_window(data->mlx, data->mlx_win);
-        data->mlx_win = NULL;
-    }
-
-    // finaliza a conexão com o display e libera o mlx
-    if (data->mlx)
-    {
-        mlx_destroy_display(data->mlx);
-        free(data->mlx);
-        data->mlx = NULL;
-    }
-
-    // opcional: zerar outros campos do data
-    data->map_file = NULL;
-    data->player.pos_x = 0;
-    data->player.pos_y = 0;
-    data->player.dir_x = 0;
-    data->player.dir_y = 0;
-    data->player.plane_x = 0;
-    data->player.plane_y = 0;
-
-    // se você tiver outros ponteiros alocados, adiciona aqui
-}

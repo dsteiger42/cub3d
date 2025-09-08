@@ -14,27 +14,17 @@
 
 int handle_close(t_data *data)
 {
-    if (data->img)
-        mlx_destroy_image(data->mlx, data->img);
-    if (data->mlx_win)
-        mlx_destroy_window(data->mlx, data->mlx_win);
+    if (!data)
+        exit(0);
     if (data->mlx)
-    {
-        mlx_destroy_display(data->mlx);
-        free(data->mlx);
-    }
-    free_data(data);
+        mlx_loop_end(data->mlx);  // termina o loop antes de free
     return (0);
 }
 
-
 int handle_keypress(int keycode, t_data *data)
 {
-    if (keycode == ESC)
-    {
-        mlx_destroy_window(data->mlx, data->mlx_win);
-        exit(0);
-    }
+    if (keycode == ESC && data->mlx)
+        mlx_loop_end(data->mlx);  // termina o loop antes de free
     else if (keycode == W)
         printf("Move forward (W)\n");
     else if (keycode == S)
