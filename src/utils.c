@@ -109,10 +109,12 @@ void free_data(t_data *data)
     // destrói display e libera struct mlx
     if (data->mlx)
     {
+        mlx_destroy_display(data->mlx);  // 🔥 importante no Linux
         free(data->mlx);
         data->mlx = NULL;
     }
 }
+
 
 
 

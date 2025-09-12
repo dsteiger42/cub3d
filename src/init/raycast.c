@@ -1,28 +1,7 @@
 #include "../includes/cub3d.h"
 
-// RAYCAST AINDA NAO FUNCIONA, 
-// FIZ ISSO AQUI NO CHAT GPT, SÓ PRA TER UMA IDEIA DO QUE PRECISAMOS
-// COLOCAR NAS ESTRUTURAS...
-
-
-/*static void put_pixel(t_data *data, int x, int y, int color)
-{
-    char    *dst;
-    int     bpp;
-    int     line;
-    int     endian;
-
-    dst = mlx_get_data_addr(data->img, &bpp, &line, &endian);
-    dst += y * line + x * (bpp / 8);
-    *(int *)dst = color;
-}*/
-/* raycast.c */
-/* inclua aqui os typedefs e protótipos (mlx, t_data, t_img, t_texture, etc) */
-
 #define SCREEN_W 960
 #define SCREEN_H 720
-
-
 
 static int	select_texture_id(t_data *data, int side, double ray_dir_x, double ray_dir_y)
 {

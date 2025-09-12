@@ -53,8 +53,8 @@
 # define RIGHT_ARROW 65363
 # define ESC 65307
 
-#define MOVE_SPEED 0.05
-#define ROT_SPEED 0.05
+#define MOVE_SPEED 0.01
+#define ROT_SPEED 0.01
 # define MOUSE_SENSITIVITY 0.003
 #define DIST_EDGE_MOUSE_WRAP 10
 #define WIN_WIDTH 960
@@ -104,16 +104,30 @@ typedef struct s_texture
     int height;
 } t_texture;
 
+typedef struct s_keys
+{
+    int w;
+    int a;
+    int s;
+    int d;
+    int left;
+    int right;
+    int esc;
+}   t_keys;
+
 typedef struct s_data
 {
     void        *mlx;
     void        *mlx_win;
     void        *img;
     char        *map_file;
+    t_keys      keys;
     t_player    player;
     t_map       *pmap;
     t_texture   textures[4]; // NO, SO, WE, EA
 }   t_data;
+
+
 
 void move_forward(t_data *data);
 void move_backward(t_data *data);
