@@ -255,12 +255,11 @@ void	init_mlx(t_data *data)
 	data->img = mlx_new_image(data->mlx, 960, 720);
 	if (!data->img)
 		clean_exit(data, err_msg("img: Could not create new image\n", 1));
-	mlx_hook(data->mlx_win, 2, 1L<<0, handle_keypress, data);
-	mlx_hook(data->mlx_win, 3, 1L<<1, handle_keyrelease, data);
-	mlx_hook(data->mlx_win, 17, 0, handle_close, data);
-	mlx_hook(data->mlx_win, 6, 1L<<6, handle_mouse, data);
-
-	mlx_loop_hook(data->mlx, game_loop, data); // <<< aqui
+	mlx_hook(data->mlx_win, 2, 1L<<0, handle_keypress, data); // key press
+	mlx_hook(data->mlx_win, 3, 1L<<1, handle_keyrelease, data); // key release
+	mlx_hook(data->mlx_win, 17, 0, handle_close, data); // X
+	mlx_hook(data->mlx_win, 6, 1L<<6, handle_mouse, data); // mouse move
+	mlx_loop_hook(data->mlx, game_loop, data); // loop movement
 	mlx_loop(data->mlx);
 }
 

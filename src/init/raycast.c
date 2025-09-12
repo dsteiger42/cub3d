@@ -38,55 +38,63 @@ static int	get_tex_color(t_texture *tex, int tx, int ty)
 }
 
 /* desenha uma coluna x: preenche ceiling, parede texturizada e floor */
-static void	draw_column(t_data *data, t_img *screen, int x, int draw_start,
-	int draw_end, int tex_id, double wall_x)
+static void draw_column(t_data *data, t_img *screen, int x,
+                        int draw_start, int draw_end, int tex_id, double wall_x)
 {
-	int			y;
-	int			line_height;
-	double		step;
-	double		tex_pos;
-	int			tex_y;
-	int			tex_x;
-	int			color;
-	t_texture	*tex;
+    int         y;
+    int         line_height;
+    double      step;
+    double      tex_pos;
+    int         tex_y;
+    int         tex_x;
+    int         color;
+    t_texture   *tex;
 
-	if (!data || !screen || tex_id < 0 || tex_id > 3)
-		return ;
-	tex = &data->textures[tex_id];
-	line_height = draw_end - draw_start + 1;
-	if (line_height <= 0)
-		line_height = 1;
-	step = (double)tex->height / (double)line_height;
-	tex_pos = 0.0;
-	tex_x = (int)(wall_x * (double)tex->width);
-	if (tex_x < 0)
-		tex_x = 0;
-	if (tex_x >= tex->width)
-		tex_x = tex->width - 1;
+    if (!data || !screen || tex_id < 0 || tex_id > 3)
+        return ;
 
-	y = 0;
-	while (y < SCREEN_H)
-	{
-		if (y < draw_start)
-			screen->addr[y * (screen->size_line / 4) + x] =
-				(data->pmap->ceiling[0] << 16) |
-				(data->pmap->ceiling[1] << 8) |
-				data->pmap->ceiling[2];
-		else if (y <= draw_end)
-		{
-			tex_y = (int)tex_pos;
-			color = get_tex_color(tex, tex_x, tex_y);
-			screen->addr[y * (screen->size_line / 4) + x] = color;
-			tex_pos += step;
-		}
-		else
-			screen->addr[y * (screen->size_line / 4) + x] =
-				(data->pmap->floor[0] << 16) |
-				(data->pmap->floor[1] << 8) |
-				data->pmap->floor[2];
-		y++;
-	}
+    tex = &data->textures[tex_id];
+    line_height = draw_end - draw_start + 1;
+    if (line_height <= 0)
+        line_height = 1;
+
+    // calcula o quanto cada pixel na tela representa na textura
+    step = (double)tex->height / (double)line_height;
+
+    // calcula posição inicial da textura proporcional ao draw_start
+    tex_pos = (draw_start - SCREEN_H / 2 + line_height / 2) * step;
+
+    // calcula a coordenada horizontal da textura
+    tex_x = (int)(wall_x * (double)tex->width);
+    if (tex_x < 0) tex_x = 0;
+    if (tex_x >= tex->width) tex_x = tex->width - 1;
+
+    for (y = 0; y < SCREEN_H; y++)
+    {
+        if (y < draw_start) // teto
+        {
+            screen->addr[y * (screen->size_line / 4) + x] =
+                (data->pmap->ceiling[0] << 16) |
+                (data->pmap->ceiling[1] << 8) |
+                data->pmap->ceiling[2];
+        }
+        else if (y <= draw_end) // parede
+        {
+            tex_y = (int)tex_pos & (tex->height - 1); // garante que não saia do range
+            color = get_tex_color(tex, tex_x, tex_y);
+            screen->addr[y * (screen->size_line / 4) + x] = color;
+            tex_pos += step;
+        }
+        else // chão
+        {
+            screen->addr[y * (screen->size_line / 4) + x] =
+                (data->pmap->floor[0] << 16) |
+                (data->pmap->floor[1] << 8) |
+                data->pmap->floor[2];
+        }
+    }
 }
+
 
 
 
