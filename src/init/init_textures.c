@@ -1,6 +1,6 @@
 #include "../includes/cub3d.h"
 
-    static void	copy_pixels(t_texture *tex, t_img *tmp)
+static void	copy_pixels(t_texture *tex, t_img *tmp)
 {
 	int	y;
 	int	row_len;

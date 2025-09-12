@@ -50,8 +50,12 @@
 # define UP_ARROW 65362
 # define LEFT_ARROW 65361
 # define DOWN_ARROW 65364
-# define RIGTH_ARROW 65363
+# define RIGHT_ARROW 65363
 # define ESC 65307
+
+#define MOVE_SPEED 0.05
+#define ROT_SPEED 0.05
+
 
 typedef struct s_player
 {
@@ -107,6 +111,15 @@ typedef struct s_data
     t_texture   textures[4]; // NO, SO, WE, EA
 }   t_data;
 
+void move_forward(t_data *data);
+void move_backward(t_data *data);
+void move_left(t_data *data);
+void move_right(t_data *data);
+void rotate_left(t_data *data);
+void rotate_right(t_data *data);
+int	handle_close(t_data *data);
+int	handle_keypress(int keycode, t_data *data);
+int	render_frame(t_data *data);
 
 //error_exit/exit.c
 void	clean_exit(t_data *data, int exit_code);
