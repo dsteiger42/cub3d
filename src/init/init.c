@@ -102,6 +102,7 @@ void	rotate_right(t_data *data)
 		* cos(ROT_SPEED);
 }
 
+
 int	handle_close(t_data *data)
 {
 	if (!data)
@@ -115,9 +116,9 @@ int	handle_keypress(int keycode, t_data *data)
 {
 	if (keycode == ESC && data->mlx)
 		mlx_loop_end(data->mlx); // termina o loop antes de free
-	else if (keycode == W)
+    else if (keycode == W)
 	{
-		move_forward(data);
+        move_forward(data);
 		printf("Move forward (W)\n");
 	}
 	else if (keycode == S)
@@ -148,6 +149,65 @@ int	handle_keypress(int keycode, t_data *data)
 	return (0);
 }
 
+int rotate_player(t_data *data, double angle)
+{
+    double old_dir_x = data->player.dir_x;
+    double old_plane_x = data->player.plane_x;
+
+    data->player.dir_x = data->player.dir_x * cos(angle)
+        - data->player.dir_y * sin(angle);
+    data->player.dir_y = old_dir_x * sin(angle)
+        + data->player.dir_y * cos(angle);
+
+    data->player.plane_x = data->player.plane_x * cos(angle)
+        - data->player.plane_y * sin(angle);
+    data->player.plane_y = old_plane_x * sin(angle)
+        + data->player.plane_y * cos(angle);
+
+    return (1);
+}
+
+/*
+** Wrap cursor around window edges to keep it inside.
+*/
+static void wrap_mouse_position(int *x, int *y)
+{
+    if (*x > WIN_WIDTH - DIST_EDGE_MOUSE_WRAP)
+        *x = DIST_EDGE_MOUSE_WRAP;
+    else if (*x < DIST_EDGE_MOUSE_WRAP)
+        *x = WIN_WIDTH - DIST_EDGE_MOUSE_WRAP;
+
+    if (*y > WIN_HEIGHT - DIST_EDGE_MOUSE_WRAP)
+        *y = DIST_EDGE_MOUSE_WRAP;
+    else if (*y < DIST_EDGE_MOUSE_WRAP)
+        *y = WIN_HEIGHT - DIST_EDGE_MOUSE_WRAP;
+}
+
+
+
+/*
+** Mouse motion handler (event 6).
+*/
+int handle_mouse(int x, int y, t_data *data)
+{
+    static int old_x = -1;
+    int         delta_x;
+
+    if (old_x == -1) // first call → init
+        old_x = x;
+
+    wrap_mouse_position(&x, &y);
+
+    delta_x = x - old_x;
+    if (delta_x != 0)
+    {
+        double angle = delta_x * MOUSE_SENSITIVITY;
+        rotate_player(data, angle);
+    }
+    old_x = x;
+    return (0);
+}
+
 int	render_frame(t_data *data)
 {
 	// aqui você pode limpar a imagem se quiser
@@ -171,6 +231,7 @@ void	init_mlx(t_data *data)
 		clean_exit(data, err_msg("img: Could not create new image\n", 1));
 	mlx_hook(data->mlx_win, 2, 1L << 0, handle_keypress, data);
 	mlx_hook(data->mlx_win, 17, 0, handle_close, data);
+    mlx_hook(data->mlx_win, 6, 1L << 6, handle_mouse, data);
 	mlx_loop_hook(data->mlx, render_frame, data);
 	mlx_loop(data->mlx);
 }

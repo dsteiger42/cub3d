@@ -55,6 +55,10 @@
 
 #define MOVE_SPEED 0.05
 #define ROT_SPEED 0.05
+# define MOUSE_SENSITIVITY 0.003
+#define DIST_EDGE_MOUSE_WRAP 10
+#define WIN_WIDTH 960
+#define WIN_HEIGHT 720
 
 
 typedef struct s_player
@@ -120,6 +124,9 @@ void rotate_right(t_data *data);
 int	handle_close(t_data *data);
 int	handle_keypress(int keycode, t_data *data);
 int	render_frame(t_data *data);
+int handle_mouse(int x, int y, t_data *data);
+int rotate_player(t_data *data, double angle);
+
 
 //error_exit/exit.c
 void	clean_exit(t_data *data, int exit_code);
