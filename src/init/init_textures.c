@@ -1,42 +1,46 @@
 #include "../includes/cub3d.h"
 
-static void copy_pixels(t_texture *tex, t_img *tmp)
+    static void	copy_pixels(t_texture *tex, t_img *tmp)
 {
-    int x;
-    int y;
+	int	y;
+	int	row_len;
 
-    y = 0;
-    while (y < tex->height)
-    {
-        x = 0;
-        while (x < tex->width)
-        {
-            tex->data[y * tex->width + x] = tmp->addr[y * tex->width + x];
-            x++;
-        }
-        y++;
-    }
+	if (!tmp->addr || tmp->pixel_bits == 0)
+		return ;
+	row_len = tmp->size_line / (tmp->pixel_bits / 8);
+	y = 0;
+	while (y < tex->height)
+	{
+		if (tex->width <= row_len)
+			memcpy(&tex->data[y * tex->width],
+				&tmp->addr[y * row_len],
+				sizeof(int) * tex->width);
+		else
+			memset(&tex->data[y * tex->width], 0, sizeof(int) * tex->width);
+		y++;
+	}
 }
 
-static int load_texture(t_data *data, t_texture *tex, char *path)
+
+int load_texture(t_data *data, t_texture *tex, char *path)
 {
     t_img tmp;
 
     tmp.img = mlx_xpm_file_to_image(data->mlx, path, &tex->width, &tex->height);
     if (!tmp.img)
-        return (err_msg("Error to load texture\n", 1), -1);
-    tmp.addr = (int *)mlx_get_data_addr(tmp.img, &tmp.pixel_bits,
-            &tmp.size_line, &tmp.endian);
-    tex->data = ft_calloc(tex->width * tex->height, sizeof(int));
+        return (-1);
+    tmp.addr = (int *)mlx_get_data_addr(tmp.img, &tmp.pixel_bits, &tmp.size_line,
+                                       &tmp.endian);
+    if (!tmp.addr)
+        return (-1);
+    tex->data = malloc(sizeof(int) * tex->width * tex->height);
     if (!tex->data)
-    {
-        mlx_destroy_image(data->mlx, tmp.img);
-        return (err_msg("Error to allocate memory for texture\n", 1), -1);
-    }
+        return (-1);
     copy_pixels(tex, &tmp);
-    mlx_destroy_image(data->mlx, tmp.img);
+    mlx_destroy_image(data->mlx, tmp.img); // opcional: libera imagem temporária
     return (0);
 }
+
 
 int init_textures(t_data *data)
 {

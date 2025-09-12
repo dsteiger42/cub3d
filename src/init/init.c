@@ -51,8 +51,12 @@ int render_frame(t_data *data)
 void init_mlx(t_data *data)
 {
     data->mlx = mlx_init();
+
     if (!data->mlx)
         clean_exit(data, err_msg("mlx: Could not start mlx\n", 1));
+
+    if (init_textures(data) == -1)
+        clean_exit(data, err_msg("Textures init failed\n", 1));
 
     data->mlx_win = mlx_new_window(data->mlx, 960, 720, "cub3D");
     if (!data->mlx_win)
@@ -62,15 +66,13 @@ void init_mlx(t_data *data)
     if (!data->img)
         clean_exit(data, err_msg("img: Could not create new image\n", 1));
 
-    if (init_textures(data) == -1)
-        clean_exit(data, err_msg("Textures init failed\n", 1));
-
     mlx_hook(data->mlx_win, 2, 1L<<0, handle_keypress, data);
     mlx_hook(data->mlx_win, 17, 0, handle_close, data);
     mlx_loop_hook(data->mlx, render_frame, data);
 
     mlx_loop(data->mlx);
 }
+
 
 
 int init_player(t_player *player)
@@ -90,19 +92,33 @@ int init_player(t_player *player)
 
 int init_map(t_map *pmap)
 {
-	if (!pmap)
-		return -1;
-	pmap->map = NULL;
-	pmap->map2 = NULL;	
-	pmap->line_count = 0;
-    (pmap)->no = NULL;
-	(pmap)->so = NULL;
-	(pmap)->we = NULL;
-	(pmap)->ea = NULL;
-	(pmap)->floor[0] = 0;
-	(pmap)->ceiling[0] = 0;
+    if (!pmap)
+        return -1;
+    pmap->map = NULL;
+    pmap->map2 = NULL;   
+    pmap->line_count = 0;
+    pmap->no = NULL;
+    pmap->so = NULL;
+    pmap->we = NULL;
+    pmap->ea = NULL;
+    ft_bzero(pmap->floor, sizeof(pmap->floor));
+    ft_bzero(pmap->ceiling, sizeof(pmap->ceiling));
+
+    return (0);
+}
+
+
+int	init_texture(t_texture *tex)
+{
+	if (!tex)
+		return (-1);
+	tex->img = NULL;
+	tex->data = NULL;
+	tex->width = 0;
+	tex->height = 0;
 	return (0);
 }
+
     
 int init_data_structures(t_data *data)
 {
@@ -117,6 +133,10 @@ int init_data_structures(t_data *data)
         return (free(data->pmap), err_msg("Player init failed\n", 1), -1);
     if (init_map(data->pmap) == -1)
         return (free(data->pmap), err_msg("Map init failed\n", 1), -1);
-
+    if (init_texture(&data->textures[0]) == -1
+	    || init_texture(&data->textures[1]) == -1
+	    || init_texture(&data->textures[2]) == -1
+	    || init_texture(&data->textures[3]) == -1)
+        return (free(data->pmap), err_msg("Texture init failed\n", 1), -1);
     return (0);
 }

@@ -48,31 +48,62 @@ int validfd(t_map *map, char *file)
 	return (0);
 }
 
+static void	set_player_dir_plane(t_player *player, char c)
+{
+	if (c == 'N')
+	{
+		player->dir_x = 0;
+		player->dir_y = -1;
+		player->plane_x = 0.66;
+		player->plane_y = 0;
+	}
+	else if (c == 'S')
+	{
+		player->dir_x = 0;
+		player->dir_y = 1;
+		player->plane_x = -0.66;
+		player->plane_y = 0;
+	}
+	else if (c == 'E')
+	{
+		player->dir_x = 1;
+		player->dir_y = 0;
+		player->plane_x = 0;
+		player->plane_y = 0.66;
+	}
+	else if (c == 'W')
+	{
+		player->dir_x = -1;
+		player->dir_y = 0;
+		player->plane_x = 0;
+		player->plane_y = -0.66;
+	}
+}
+
+/* trata a posição inicial do jogador */
 static int	handle_player_start(t_data *data, char c, int x, int y)
 {
-	if (ft_strchr("NSEW", c))
-	{
-		data->player.players++;
-		data->player.pos_x = x;
-		data->player.pos_y = y;
-		if (data->player.players > 1)
-			return (err_msg("Multiple start positions\n", 1), -1);
-	}
+	if (!data || !ft_strchr("NSEW", c))
+		return (0);
+	data->player.players++;
+	if (data->player.players > 1)
+		return (err_msg("Multiple start positions\n", 1), -1);
+	data->player.pos_x = x + 0.5;
+	data->player.pos_y = y + 0.5;
+	set_player_dir_plane(&data->player, c);
 	return (0);
 }
-#include "../includes/cub3d.h"
 
 int	valid_map(t_data *data)
 {
-	int		y;
-	int		x;
+	int	y;
+	int	x;
 	char	c;
 
 	if (!data || !data->pmap || !data->pmap->map)
 		return (err_msg("Map not loaded\n", 1), -1);
-
 	y = 0;
-	while (data->pmap->map[y])
+	while (y < data->pmap->line_count)
 	{
 		x = 0;
 		while (data->pmap->map[y][x])
@@ -86,6 +117,8 @@ int	valid_map(t_data *data)
 		}
 		y++;
 	}
+	if (data->player.players != 1)
+		return (err_msg("No start position found\n", 1), -1);
 	return (0);
 }
 
