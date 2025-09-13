@@ -27,54 +27,41 @@ void	ft_free_split(char **split)
 	free(split);
 }
 
+void	free_textures(t_data *data)
+{
+	int i;
+
+	if (!data)
+		return ;
+	i = 0;
+	while (i < 4)
+	{
+		free(data->textures[i].data);
+		data->textures[i].data = NULL;
+		i++;
+	}
+}
+
 void	free_map_and_textures(t_map *pmap)
 {
 	int	i;
 
 	if (!pmap)
 		return ;
-	if (pmap->map)
-	{
-		i = 0;
-		while (i < pmap->line_count && pmap->map[i])
-		{
-			free(pmap->map[i]);
-			i++;
-		}
-		free(pmap->map);
-		pmap->map = NULL;
-	}
-	if (pmap->map2)
-	{
-		i = 0;
-		while (i < pmap->line_count && pmap->map2[i])
-		{
-			free(pmap->map2[i]);
-			i++;
-		}
-		free(pmap->map2);
-		pmap->map2 = NULL;
-	}
-	if (pmap->no)
-	{
-		free(pmap->no);
-		pmap->no = NULL;
-	}
-	if (pmap->so)
-	{
-		free(pmap->so);
-		pmap->so = NULL;
-	}
-	if (pmap->we)
-	{
-		free(pmap->we);
-		pmap->we = NULL;
-	}
-	if (pmap->ea)
-	{
-		free(pmap->ea);
-		pmap->ea = NULL;
-	}
+	i = 0;
+	while (i < pmap->line_count && pmap->map && pmap->map[i])
+		free(pmap->map[i++]);
+	free(pmap->map);
+	pmap->map = NULL;
+	i = 0;
+	while (i < pmap->line_count && pmap->map2 && pmap->map2[i])
+		free(pmap->map2[i++]);
+	free(pmap->map2);
+	pmap->map2 = NULL;
+	free(pmap->no); pmap->no = NULL;
+	free(pmap->so); pmap->so = NULL;
+	free(pmap->we); pmap->we = NULL;
+	free(pmap->ea); pmap->ea = NULL;
 	pmap->line_count = 0;
 }
 
@@ -82,6 +69,7 @@ void	free_data(t_data *data)
 {
 	if (!data)
 		return ;
+	free_textures(data);
 	if (data->pmap)
 	{
 		free_map_and_textures(data->pmap);
@@ -89,15 +77,9 @@ void	free_data(t_data *data)
 		data->pmap = NULL;
 	}
 	if (data->img && data->mlx)
-	{
 		mlx_destroy_image(data->mlx, data->img);
-		data->img = NULL;
-	}
 	if (data->mlx_win && data->mlx)
-	{
 		mlx_destroy_window(data->mlx, data->mlx_win);
-		data->mlx_win = NULL;
-	}
 	if (data->mlx)
 	{
 		mlx_destroy_display(data->mlx);
@@ -105,6 +87,7 @@ void	free_data(t_data *data)
 		data->mlx = NULL;
 	}
 }
+
 
 void	free_mlx(t_data *data)
 {

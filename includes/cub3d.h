@@ -144,7 +144,7 @@ typedef struct s_data
 	t_keys		keys;
 	t_player	player;
 	t_map		*pmap;
-	t_texture textures[4]; // NO, SO, WE, EA
+	t_texture	textures[4]; // NO, SO, WE, EA
 }				t_data;
 
 // error_exit/exit.c
