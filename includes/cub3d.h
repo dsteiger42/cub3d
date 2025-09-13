@@ -55,11 +55,11 @@
 
 #define MOVE_SPEED 0.01
 #define ROT_SPEED 0.01
-# define MOUSE_SENSITIVITY 0.03
+#define MOUSE_SENSITIVITY 0.003
 #define DIST_EDGE_MOUSE_WRAP 10
 #define WIN_WIDTH 960
 #define WIN_HEIGHT 720
-
+#define PLAYER_RADIUS 0.3
 
 typedef struct s_player
 {
@@ -114,6 +114,8 @@ typedef struct s_keys
     int right;
     int esc;
 }   t_keys;
+
+
 
 typedef struct s_data
 {

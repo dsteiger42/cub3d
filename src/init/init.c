@@ -49,61 +49,82 @@ int handle_keyrelease(int keycode, t_data *data)
     return (0);
 }
 
-
-void	move_forward(t_data *data)
+static int can_move_x(t_data *data, double nx, double y)
 {
-	double	nx;
-	double	ny;
-
-	nx = data->player.pos_x + data->player.dir_x * MOVE_SPEED;
-	ny = data->player.pos_y + data->player.dir_y * MOVE_SPEED;
-	if (data->pmap->map[(int)ny][(int)nx] != '1')
-	{
-		data->player.pos_x = nx;
-		data->player.pos_y = ny;
-	}
+    if (data->pmap->map[(int)(y + PLAYER_RADIUS)][(int)(nx + PLAYER_RADIUS)] == '1')
+        return 0;
+    if (data->pmap->map[(int)(y - PLAYER_RADIUS)][(int)(nx + PLAYER_RADIUS)] == '1')
+        return 0;
+    if (data->pmap->map[(int)(y + PLAYER_RADIUS)][(int)(nx - PLAYER_RADIUS)] == '1')
+        return 0;
+    if (data->pmap->map[(int)(y - PLAYER_RADIUS)][(int)(nx - PLAYER_RADIUS)] == '1')
+        return 0;
+    return 1;
 }
 
-void	move_backward(t_data *data)
+static int can_move_y(t_data *data, double x, double ny)
 {
-	double	nx;
-	double	ny;
-
-	nx = data->player.pos_x - data->player.dir_x * MOVE_SPEED;
-	ny = data->player.pos_y - data->player.dir_y * MOVE_SPEED;
-	if (data->pmap->map[(int)ny][(int)nx] != '1')
-	{
-		data->player.pos_x = nx;
-		data->player.pos_y = ny;
-	}
+    if (data->pmap->map[(int)(ny + PLAYER_RADIUS)][(int)(x + PLAYER_RADIUS)] == '1')
+        return 0;
+    if (data->pmap->map[(int)(ny - PLAYER_RADIUS)][(int)(x + PLAYER_RADIUS)] == '1')
+        return 0;
+    if (data->pmap->map[(int)(ny + PLAYER_RADIUS)][(int)(x - PLAYER_RADIUS)] == '1')
+        return 0;
+    if (data->pmap->map[(int)(ny - PLAYER_RADIUS)][(int)(x - PLAYER_RADIUS)] == '1')
+        return 0;
+    return 1;
 }
 
-void	move_left(t_data *data)
+void move_forward(t_data *data)
 {
-	double	nx;
-	double	ny;
+    double nx;
+    double ny;
 
-	nx = data->player.pos_x + data->player.dir_y * MOVE_SPEED;
-	ny = data->player.pos_y - data->player.dir_x * MOVE_SPEED;
-	if (data->pmap->map[(int)ny][(int)nx] != '1')
-	{
-		data->player.pos_x = nx;
-		data->player.pos_y = ny;
-	}
+    nx = data->player.pos_x + data->player.dir_x * MOVE_SPEED;
+    ny = data->player.pos_y + data->player.dir_y * MOVE_SPEED;
+    if (can_move_x(data, nx, data->player.pos_y))
+        data->player.pos_x = nx;
+    if (can_move_y(data, data->player.pos_x, ny))
+        data->player.pos_y = ny;
 }
 
-void	move_right(t_data *data)
+void move_backward(t_data *data)
 {
-	double	nx;
-	double	ny;
+    double nx;
+    double ny;
 
-	nx = data->player.pos_x - data->player.dir_y * MOVE_SPEED;
-	ny = data->player.pos_y + data->player.dir_x * MOVE_SPEED;
-	if (data->pmap->map[(int)ny][(int)nx] != '1')
-	{
-		data->player.pos_x = nx;
-		data->player.pos_y = ny;
-	}
+    nx = data->player.pos_x - data->player.dir_x * MOVE_SPEED;
+    ny = data->player.pos_y - data->player.dir_y * MOVE_SPEED;
+    if (can_move_x(data, nx, data->player.pos_y))
+        data->player.pos_x = nx;
+    if (can_move_y(data, data->player.pos_x, ny))
+        data->player.pos_y = ny;
+}
+
+void move_left(t_data *data)
+{
+    double nx;
+    double ny;
+
+    nx = data->player.pos_x - data->player.plane_x * MOVE_SPEED;
+    ny = data->player.pos_y - data->player.plane_y * MOVE_SPEED;
+    if (can_move_x(data, nx, data->player.pos_y))
+        data->player.pos_x = nx;
+    if (can_move_y(data, data->player.pos_x, ny))
+        data->player.pos_y = ny;
+}
+
+void move_right(t_data *data)
+{
+    double nx;
+    double ny;
+
+    nx = data->player.pos_x + data->player.plane_x * MOVE_SPEED;
+    ny = data->player.pos_y + data->player.plane_y * MOVE_SPEED;
+    if (can_move_x(data, nx, data->player.pos_y))
+        data->player.pos_x = nx;
+    if (can_move_y(data, data->player.pos_x, ny))
+        data->player.pos_y = ny;
 }
 
 void	rotate_left(t_data *data)
