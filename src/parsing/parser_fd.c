@@ -36,18 +36,25 @@ static int	parse_texture(t_map *pmap, char *id, char *path)
 	return (open_and_check(trim));
 }
 
-static int	is_number(char *s)
+static int	is_number_invalid(char *s)
 {
-	if (!s || !*s)
-		return (0);
-	while (*s)
+	int	i = 0;
+
+	if (!s)
+		return (1); 
+	while (s[i] && (s[i] == ' ' || s[i] == '\t'))
+		i++;
+	if (!s[i])
+		return (1);
+	while (s[i])
 	{
-		if (*s < '0' || *s > '9')
-			return (0);
-		s++;
+		if (!ft_isdigit(s[i]) && s[i] != ' ' && s[i] != '\t' && s[i] != '\n')
+			return (1);
+		i++;
 	}
-	return (1);
+	return (0);
 }
+
 
 static int	parse_color_line(int *arr, char *line)
 {
@@ -62,7 +69,7 @@ static int	parse_color_line(int *arr, char *line)
 	i = 0;
 	while (split[i])
 	{
-		if (!is_number(split[i]))
+		if (is_number_invalid(split[i]))
 			return (ft_free_split(split), err_msg("Invalid RGB\n", 1), -1);
 		arr[i] = ft_atoi(split[i]);
 		if (arr[i] < 0 || arr[i] > 255)
@@ -74,7 +81,6 @@ static int	parse_color_line(int *arr, char *line)
 		return (err_msg("RGB needs 3 values\n", 1), -1);
 	return (0);
 }
-
 
 static int	parse_header_line(t_map *pmap, char *line)
 {
