@@ -28,7 +28,6 @@ int valid_textures(t_map *pmap)
 	if (!pmap->no || !pmap->so ||
 		!pmap->we || !pmap->ea)
 		return (err_msg("Missing texture\n", 1), -1);
-
 	if (open_and_check(pmap->no) == -1)
 		return (-1);
 	if (open_and_check(pmap->so) == -1)
@@ -69,7 +68,6 @@ int main(int ac, char *av[])
 		return (err_msg("Wrong number of args\n", 1)), -1;
 	if(init_and_validate(&data, av[1]))
 		return (free_data(&data), -1);
-	//print_map(data.pmap->map, data.pmap->line_count);
 	init_mlx(&data);
 	free_data(&data);
 	return (0);

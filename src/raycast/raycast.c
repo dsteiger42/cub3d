@@ -1,107 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cub3d_structs.h                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: samuel <samuel@student.42.fr>             +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/13 15:20:00 by samuel            #+#    #+#             */
-/*   Updated: 2025/09/13 15:20:01 by samuel           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/cub3d.h"
 
 #define SCREEN_W 960 
 #define SCREEN_H 720
 
-static int select_texture_id(t_data *data, int side, double ray_dir_x, double ray_dir_y)
-{
-    (void)data;
-    if (side == 0)
-    {
-        if (ray_dir_x > 0)
-            return (3);
-        return (2);
-    }
-    else
-    {
-        if (ray_dir_y > 0)
-            return (1);
-        return (0);
-    }
-}
 
-/* Inicializa ray para cada coluna */
-static void init_ray(t_ray *ray, int x, t_player *player)
-{
-    ray->camera_x = 2.0 * x / SCREEN_W - 1.0;
-    ray->dir_x = player->dir_x + player->plane_x * ray->camera_x;
-    ray->dir_y = player->dir_y + player->plane_y * ray->camera_x;
-    ray->map_x = (int)player->pos_x;
-    ray->map_y = (int)player->pos_y;
-    if (ray->dir_x == 0.0)
-        ray->delta_dist_x = 1e30;
-    else
-        ray->delta_dist_x = fabs(1.0 / ray->dir_x);
-    if (ray->dir_y == 0.0)
-        ray->delta_dist_y = 1e30;
-    else
-        ray->delta_dist_y = fabs(1.0 / ray->dir_y);
-}
-
-/* Configura passos e sidedist inicial para DDA */
-static void set_dda(t_ray *ray, t_player *player)
-{
-    if (ray->dir_x < 0)
-    {
-        ray->step_x = -1;
-        ray->side_dist_x = (player->pos_x - ray->map_x) * ray->delta_dist_x;
-    }
-    else
-    {
-        ray->step_x = 1;
-        ray->side_dist_x = (ray->map_x + 1.0 - player->pos_x) * ray->delta_dist_x;
-    }
-    if (ray->dir_y < 0)
-    {
-        ray->step_y = -1;
-        ray->side_dist_y = (player->pos_y - ray->map_y) * ray->delta_dist_y;
-    }
-    else
-    {
-        ray->step_y = 1;
-        ray->side_dist_y = (ray->map_y + 1.0 - player->pos_y) * ray->delta_dist_y;
-    }
-}
-
-/* DDA para encontrar a parede */
-static void perform_dda(t_ray *ray, t_data *data)
-{
-    int hit;
-
-    hit = 0;
-    while (hit == 0)
-    {
-        if (ray->side_dist_x < ray->side_dist_y)
-        {
-            ray->side_dist_x += ray->delta_dist_x;
-            ray->map_x += ray->step_x;
-            ray->side = 0;
-        }
-        else
-        {
-            ray->side_dist_y += ray->delta_dist_y;
-            ray->map_y += ray->step_y;
-            ray->side = 1;
-        }
-        if (ray->map_y < 0 || ray->map_y >= data->pmap->line_count ||
-            ray->map_x < 0 || ray->map_x >= (int)strlen(data->pmap->map[ray->map_y]))
-            break ;
-        if (data->pmap->map[ray->map_y][ray->map_x] == '1')
-            hit = 1;
-    }
-}
 
 /* Calcula distância perpendicular e posição da parede */
 static void calculate_wall(t_ray *ray, t_player *player)
@@ -169,6 +71,23 @@ static void draw_column(t_data *data, t_img *screen, int x, t_ray *ray)
     }
 }
 
+/* Inicializa ray para cada coluna */
+static void init_ray(t_ray *ray, int x, t_player *player)
+{
+    ray->camera_x = 2.0 * x / SCREEN_W - 1.0;
+    ray->dir_x = player->dir_x + player->plane_x * ray->camera_x;
+    ray->dir_y = player->dir_y + player->plane_y * ray->camera_x;
+    ray->map_x = (int)player->pos_x;
+    ray->map_y = (int)player->pos_y;
+    if (ray->dir_x == 0.0)
+        ray->delta_dist_x = 1e30;
+    else
+        ray->delta_dist_x = fabs(1.0 / ray->dir_x);
+    if (ray->dir_y == 0.0)
+        ray->delta_dist_y = 1e30;
+    else
+        ray->delta_dist_y = fabs(1.0 / ray->dir_y);
+}
 
 /* Função principal de raycast */
 void raycast(t_data *data)

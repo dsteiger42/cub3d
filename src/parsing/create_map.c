@@ -63,7 +63,8 @@ int	create_map(t_data *data)
 {
     if (dupmap(data))
         return (1);
-    if (ft_floodfill(data->pmap->map2, data->player.pos_y, data->player.pos_x, data->pmap->line_count))
+    if (ft_floodfill(data->pmap->map2, data->player.pos_y,
+                    data->player.pos_x, data->pmap->line_count))
         return (1);
     return 0;
 }

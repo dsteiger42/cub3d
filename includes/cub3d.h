@@ -177,7 +177,6 @@ int     valid_map(t_data *data);
 
 //parsing/create_map.c
 int	    create_map(t_data *data);
-//int	    allocmap(t_data *data, char *av);
 int	    dupmap(t_data *data);
 
 //utils
@@ -190,8 +189,19 @@ void    free_map_and_textures(t_map *pmap);
 //parsing/parse_fd.c
 int     parse_file(t_data *data, char *file);
 
+//parsing/parser_utils.c
+int open_and_check(char *path);
+char **ft_realloc(char **map, int new_size);
+int	valid_char(char *line);
+
+
 //raycast/raycast.c
 void raycast(t_data *data);
+
+//raycast/raycast_utils.c
+void set_dda(t_ray *ray, t_player *player);
+void perform_dda(t_ray *ray, t_data *data);
+int select_texture_id(t_data *data, int side, double ray_dir_x, double ray_dir_y);
 
 //init/init_textures.c
 int init_textures(t_data *data);

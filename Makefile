@@ -5,11 +5,13 @@ CFLAGS = -Wall -Wextra -Werror -g3
 SRC = src/main.c \
 	src/parsing/check_map.c \
 	src/parsing/create_map.c \
-	src/parsing/parse_fd.c \
+	src/parsing/parser_fd.c \
+	src/parsing/parser_utils.c \
 	src/init/init.c \
 	src/init/init_textures.c \
 	src/init/init_data_structures.c \
 	src/raycast/raycast.c \
+	src/raycast/raycast_utils.c \
 	src/error_exit/exit.c \
 	src/utils.c
 
