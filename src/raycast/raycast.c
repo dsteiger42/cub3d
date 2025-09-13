@@ -1,76 +1,197 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d_structs.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: samuel <samuel@student.42.fr>             +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/13 15:20:00 by samuel            #+#    #+#             */
+/*   Updated: 2025/09/13 15:20:01 by samuel           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/cub3d.h"
 
-void draw_square(t_data *data, int x, int y, int color)
-{
-    int dx, dy;
+#define SCREEN_W 960 
+#define SCREEN_H 720
 
-    for (dy = 0; dy < TILE_SIZE; dy++)
+static int select_texture_id(t_data *data, int side, double ray_dir_x, double ray_dir_y)
+{
+    (void)data;
+    if (side == 0)
     {
-        for (dx = 0; dx < TILE_SIZE; dx++)
-        {
-            my_mlx_pixel_put(data, x + dx, y + dy, color);
-        }
+        if (ray_dir_x > 0)
+            return (3);
+        return (2);
+    }
+    else
+    {
+        if (ray_dir_y > 0)
+            return (1);
+        return (0);
     }
 }
 
-void draw_map(t_data *data)
+/* Inicializa ray para cada coluna */
+static void init_ray(t_ray *ray, int x, t_player *player)
 {
-    int row, col;
-    int tile_size = get_tile_size(data);
+    ray->camera_x = 2.0 * x / SCREEN_W - 1.0;
+    ray->dir_x = player->dir_x + player->plane_x * ray->camera_x;
+    ray->dir_y = player->dir_y + player->plane_y * ray->camera_x;
+    ray->map_x = (int)player->pos_x;
+    ray->map_y = (int)player->pos_y;
+    if (ray->dir_x == 0.0)
+        ray->delta_dist_x = 1e30;
+    else
+        ray->delta_dist_x = fabs(1.0 / ray->dir_x);
+    if (ray->dir_y == 0.0)
+        ray->delta_dist_y = 1e30;
+    else
+        ray->delta_dist_y = fabs(1.0 / ray->dir_y);
+}
 
-    for (row = 0; row < data->pmap->line_count; row++)
+/* Configura passos e sidedist inicial para DDA */
+static void set_dda(t_ray *ray, t_player *player)
+{
+    if (ray->dir_x < 0)
     {
-        for (col = 0; data->pmap->map[row][col]; col++)
-        {
-            int screen_x = col * tile_size;
-            int screen_y = row * tile_size;
-
-            if (data->pmap->map[row][col] == '1')
-                draw_square(data, screen_x, screen_y, 0x808080);
-            else if (data->pmap->map[row][col] == '0')
-                draw_square(data, screen_x, screen_y, 0x000000);
-            else if (data->pmap->map[row][col] == 'N' ||
-                     data->pmap->map[row][col] == 'S' ||
-                     data->pmap->map[row][col] == 'E' ||
-                     data->pmap->map[row][col] == 'W')
-                draw_square(data, screen_x, screen_y, 0x000000);
-        }
+        ray->step_x = -1;
+        ray->side_dist_x = (player->pos_x - ray->map_x) * ray->delta_dist_x;
+    }
+    else
+    {
+        ray->step_x = 1;
+        ray->side_dist_x = (ray->map_x + 1.0 - player->pos_x) * ray->delta_dist_x;
+    }
+    if (ray->dir_y < 0)
+    {
+        ray->step_y = -1;
+        ray->side_dist_y = (player->pos_y - ray->map_y) * ray->delta_dist_y;
+    }
+    else
+    {
+        ray->step_y = 1;
+        ray->side_dist_y = (ray->map_y + 1.0 - player->pos_y) * ray->delta_dist_y;
     }
 }
 
-void draw_player(t_data *data)
+/* DDA para encontrar a parede */
+static void perform_dda(t_ray *ray, t_data *data)
 {
-    int tile_size = get_tile_size(data);
-    int px = data->player.pos_x * tile_size;
-    int py = data->player.pos_y * tile_size;
+    int hit;
 
-    int margin = tile_size / 4; // player smaller than tile
-    for (int dy = margin; dy < tile_size - margin; dy++)
+    hit = 0;
+    while (hit == 0)
     {
-        for (int dx = margin; dx < tile_size - margin; dx++)
+        if (ray->side_dist_x < ray->side_dist_y)
         {
-            my_mlx_pixel_put(data, px + dx, py + dy, 0xFF0000);
+            ray->side_dist_x += ray->delta_dist_x;
+            ray->map_x += ray->step_x;
+            ray->side = 0;
         }
+        else
+        {
+            ray->side_dist_y += ray->delta_dist_y;
+            ray->map_y += ray->step_y;
+            ray->side = 1;
+        }
+        if (ray->map_y < 0 || ray->map_y >= data->pmap->line_count ||
+            ray->map_x < 0 || ray->map_x >= (int)strlen(data->pmap->map[ray->map_y]))
+            break ;
+        if (data->pmap->map[ray->map_y][ray->map_x] == '1')
+            hit = 1;
+    }
+}
+
+/* Calcula distância perpendicular e posição da parede */
+static void calculate_wall(t_ray *ray, t_player *player)
+{
+    if (ray->side == 0)
+        ray->perp_wall_dist = (ray->map_x - player->pos_x + (1 - ray->step_x) / 2.0) / ray->dir_x;
+    else
+        ray->perp_wall_dist = (ray->map_y - player->pos_y + (1 - ray->step_y) / 2.0) / ray->dir_y;
+    if (ray->perp_wall_dist <= 0.0)
+        ray->perp_wall_dist = 1e-30;
+    ray->line_height = (int)(SCREEN_H / ray->perp_wall_dist);
+    ray->draw_start = -ray->line_height / 2 + SCREEN_H / 2;
+    if (ray->draw_start < 0)
+        ray->draw_start = 0;
+    ray->draw_end = ray->line_height / 2 + SCREEN_H / 2;
+    if (ray->draw_end >= SCREEN_H)
+        ray->draw_end = SCREEN_H - 1;
+    if (ray->side == 0)
+        ray->wall_x = player->pos_y + ray->perp_wall_dist * ray->dir_y;
+    else
+        ray->wall_x = player->pos_x + ray->perp_wall_dist * ray->dir_x;
+    ray->wall_x -= floor(ray->wall_x);
+}
+
+/* Desenha uma coluna */
+static void draw_column(t_data *data, t_img *screen, int x, t_ray *ray)
+{
+    int         y;
+    int         tex_x;
+    int         tex_y;
+    double      step;
+    double      tex_pos;
+    int         color;
+    t_texture   *tex;
+
+    tex = &data->textures[select_texture_id(data, ray->side, ray->dir_x, ray->dir_y)];
+    tex_x = (int)(ray->wall_x * tex->width);
+    if ((ray->side == 0 && ray->dir_x < 0) || (ray->side == 1 && ray->dir_y > 0))
+        tex_x = tex->width - tex_x - 1;
+
+    step = (double)tex->height / ray->line_height;
+    tex_pos = (ray->draw_start - SCREEN_H / 2 + ray->line_height / 2) * step;
+
+    y = 0;
+    while (y < SCREEN_H)
+    {
+        if (y < ray->draw_start)
+            screen->addr[y * (screen->size_line / 4) + x] =
+                (data->pmap->ceiling[0] << 16) |
+                (data->pmap->ceiling[1] << 8) |
+                data->pmap->ceiling[2];
+        else if (y <= ray->draw_end)
+        {
+            tex_y = (int)tex_pos & (tex->height - 1);
+            color = tex->data[tex_y * tex->width + tex_x];
+            screen->addr[y * (screen->size_line / 4) + x] = color;
+            tex_pos += step;
+        }
+        else
+            screen->addr[y * (screen->size_line / 4) + x] =
+                (data->pmap->floor[0] << 16) |
+                (data->pmap->floor[1] << 8) |
+                data->pmap->floor[2];
+        y++;
     }
 }
 
 
-int get_tile_size(t_data *data)
+/* Função principal de raycast */
+void raycast(t_data *data)
 {
-    int rows = data->pmap->line_count;
-    int cols = 0;
-    for (int i = 0; i < rows; i++)
+    t_img   screen;
+    t_ray   ray;
+    int     x;
+
+    if (!data || !data->pmap || !data->pmap->map)
+        return ;
+    screen.img = data->img;
+    screen.addr = (int *)mlx_get_data_addr(screen.img, &screen.pixel_bits,
+                                           &screen.size_line, &screen.endian);
+    if (!screen.addr || screen.pixel_bits != 32)
+        return ;
+    x = 0;
+    while (x < SCREEN_W)
     {
-        int len = 0;
-        while (data->pmap->map[i][len])
-            len++;
-        if (len > cols)
-            cols = len;
+        init_ray(&ray, x, &data->player);
+        set_dda(&ray, &data->player);
+        perform_dda(&ray, data);
+        calculate_wall(&ray, &data->player);
+        draw_column(data, &screen, x, &ray);
+        x++;
     }
-
-    int tile_width = WIDTH / cols;
-    int tile_height = HEIGHT / rows;
-
-    // Use the smaller to avoid overflow
-    return (tile_width < tile_height ? tile_width : tile_height);
 }

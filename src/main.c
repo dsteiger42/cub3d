@@ -69,7 +69,7 @@ int main(int ac, char *av[])
 		return (err_msg("Wrong number of args\n", 1)), -1;
 	if(init_and_validate(&data, av[1]))
 		return (free_data(&data), -1);
-	print_map(data.pmap->map, data.pmap->line_count);
+	//print_map(data.pmap->map, data.pmap->line_count);
 	init_mlx(&data);
 	free_data(&data);
 	return (0);

@@ -115,7 +115,26 @@ typedef struct s_keys
     int esc;
 }   t_keys;
 
-
+typedef struct s_ray
+{
+    double  camera_x;
+    double  dir_x;
+    double  dir_y;
+    int     map_x;
+    int     map_y;
+    double  side_dist_x;
+    double  side_dist_y;
+    double  delta_dist_x;
+    double  delta_dist_y;
+    int     step_x;
+    int     step_y;
+    int     side;          // 0 = x side, 1 = y side
+    double  perp_wall_dist;
+    int     line_height;
+    int     draw_start;
+    int     draw_end;
+    double  wall_x;
+}   t_ray;
 
 typedef struct s_data
 {
@@ -129,8 +148,6 @@ typedef struct s_data
     t_texture   textures[4]; // NO, SO, WE, EA
 }   t_data;
 
-
-
 void move_forward(t_data *data);
 void move_backward(t_data *data);
 void move_left(t_data *data);
@@ -143,12 +160,9 @@ int	render_frame(t_data *data);
 int handle_mouse(int x, int y, t_data *data);
 int rotate_player(t_data *data, double angle);
 
-
 //error_exit/exit.c
 void	clean_exit(t_data *data, int exit_code);
 int     err_msg(char *msg, int exit_code);
-
-
 
 //init/init.c
 void	init_mlx(t_data *data);
@@ -171,17 +185,23 @@ void    free_data(t_data *data);
 void	print_map(char **map, int line_count);
 void    ft_free_split(char **split);
 void    print_config_map(t_map *pmap);
-void free_map_and_textures(t_map *pmap);
+void    free_map_and_textures(t_map *pmap);
 
 //parsing/parse_fd.c
 int     parse_file(t_data *data, char *file);
 
-
-//init/raycast.c
+//raycast/raycast.c
 void raycast(t_data *data);
 
 //init/init_textures.c
 int init_textures(t_data *data);
+int	init_texture(t_texture *tex);
+int load_texture(t_data *data, t_texture *tex, char *path); 
+
+//init/init_textures.c
+int	init_player(t_player *player);
+int	init_map(t_map *pmap);
+int	init_data_structures(t_data *data);
 
 
 #endif

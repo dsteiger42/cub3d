@@ -1,5 +1,15 @@
 #include "../includes/cub3d.h"
 
+int	init_texture(t_texture *tex)
+{
+	if (!tex)
+		return (-1);
+	tex->img = NULL;
+	tex->data = NULL;
+	tex->width = 0;
+	tex->height = 0;
+	return (0);
+}
 static void	copy_pixels(t_texture *tex, t_img *tmp)
 {
 	int	y;
