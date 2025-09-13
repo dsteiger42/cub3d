@@ -6,7 +6,7 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:53:43 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/09/14 00:12:44 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/14 00:54:48 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ static void	set_player_dir_plane(t_player *player, char c)
 		player->plane_x = -0.66;
 		player->plane_y = 0;
 	}
-	else if (c == 'E')
+}
+
+static void	set_player_dir_plane_ew(t_player *player, char c)
+{
+	if (c == 'E')
 	{
 		player->dir_x = 1;
 		player->dir_y = 0;

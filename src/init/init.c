@@ -6,7 +6,7 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 18:06:43 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/09/14 00:05:42 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/14 00:47:48 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	get_screen_size(t_data *data)
 		data->screen_h = 1080;
 }
 
+void	init_mlx(t_data *data)
 void	init_mlx(t_data *data)
 {
 	data->mlx = mlx_init();

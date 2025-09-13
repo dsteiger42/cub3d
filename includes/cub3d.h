@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dsteiger <dsteiger@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 16:21:07 by dsteiger          #+#    #+#             */
-/*   Updated: 2025/08/29 19:08:15 by dsteiger         ###   ########.fr       */
+/*   Updated: 2025/09/14 00:48:00 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ typedef struct s_data
 	t_keys		keys;
 	t_player	player;
 	t_map		*pmap;
-	t_texture	textures[4]; // NO, SO, WE, EA
+	t_texture textures[4]; // NO, SO, WE, EA
 }				t_data;
 
 // error_exit/exit.c
@@ -154,6 +154,7 @@ int				err_msg(char *msg, int exit_code);
 // init/init_data_structures.c
 int				init_player(t_player *player);
 int				init_map(t_map *map);
+void			init_img(t_img *img);
 int				init_data_structures(t_data *data);
 
 // init/init_textures.c
