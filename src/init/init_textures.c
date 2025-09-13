@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_textures.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/14 00:05:54 by samuel            #+#    #+#             */
+/*   Updated: 2025/09/14 00:06:34 by samuel           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/cub3d.h"
 
 int	init_texture(t_texture *tex)
@@ -10,6 +22,7 @@ int	init_texture(t_texture *tex)
 	tex->height = 0;
 	return (0);
 }
+
 static void	copy_pixels(t_texture *tex, t_img *tmp)
 {
 	int	y;
@@ -45,7 +58,7 @@ int	load_texture(t_data *data, t_texture *tex, char *path)
 	if (!tex->data)
 		return (-1);
 	copy_pixels(tex, &tmp);
-	mlx_destroy_image(data->mlx, tmp.img); // opcional: libera imagem temporária
+	mlx_destroy_image(data->mlx, tmp.img);
 	return (0);
 }
 

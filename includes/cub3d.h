@@ -52,7 +52,7 @@
 # define RIGHT_ARROW 65363
 # define ESC 65307
 
-# define MOVE_SPEED 0.01
+# define MOVE_SPEED 0.02
 # define ROT_SPEED 0.01
 # define MOUSE_SENSITIVITY 0.003
 # define DIST_EDGE_MOUSE_WRAP 10

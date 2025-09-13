@@ -1,16 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_map.c                                        :+:      :+:    :+:   */
+/*   map_valid.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dsteiger <dsteiger@student.42.fr>          +#+  +:+       +#+        */
+/*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:53:43 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/08/29 18:36:13 by dsteiger         ###   ########.fr       */
+/*   Updated: 2025/09/14 00:12:44 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+static void	set_w(t_player *player)
+{
+	player->dir_x = -1;
+	player->dir_y = 0;
+	player->plane_x = 0;
+	player->plane_y = -0.66;
+}
 
 static void	set_player_dir_plane(t_player *player, char c)
 {
@@ -36,12 +44,7 @@ static void	set_player_dir_plane(t_player *player, char c)
 		player->plane_y = 0.66;
 	}
 	else if (c == 'W')
-	{
-		player->dir_x = -1;
-		player->dir_y = 0;
-		player->plane_x = 0;
-		player->plane_y = -0.66;
-	}
+		set_w(player);
 }
 
 /* trata a posição inicial do jogador */

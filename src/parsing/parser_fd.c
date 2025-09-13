@@ -38,8 +38,9 @@ static int	parse_texture(t_map *pmap, char *id, char *path)
 
 static int	is_number_invalid(char *s)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	if (!s)
 		return (1); 
 	while (s[i] && (s[i] == ' ' || s[i] == '\t'))

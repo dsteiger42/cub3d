@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycast.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/13 23:47:33 by samuel            #+#    #+#             */
+/*   Updated: 2025/09/13 23:51:17 by samuel           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/cub3d.h"
 
 /* Calcula distância perpendicular e posição da parede */
@@ -43,13 +55,15 @@ static void	draw_column(t_data *data, t_img *screen, int x, t_ray *ray)
 			&& ray->dir_y > 0))
 		tex_x = tex->width - tex_x - 1;
 	step = (double)tex->height / ray->line_height;
-	tex_pos = (ray->draw_start - data->screen_h / 2 + ray->line_height / 2) * step;
+	tex_pos = (ray->draw_start - data->screen_h / 2
+			+ ray->line_height / 2) * step;
 	y = 0;
 	while (y < data->screen_h)
 	{
 		if (y < ray->draw_start)
 			screen->addr[y * (screen->size_line / 4)
-				+ x] = (data->pmap->ceiling[0] << 16) | (data->pmap->ceiling[1] << 8) | data->pmap->ceiling[2];
+				+ x] = (data->pmap->ceiling[0] << 16) |
+				(data->pmap->ceiling[1] << 8) | data->pmap->ceiling[2];
 		else if (y <= ray->draw_end)
 		{
 			tex_y = (int)tex_pos & (tex->height - 1);
@@ -59,7 +73,8 @@ static void	draw_column(t_data *data, t_img *screen, int x, t_ray *ray)
 		}
 		else
 			screen->addr[y * (screen->size_line / 4)
-				+ x] = (data->pmap->floor[0] << 16) | (data->pmap->floor[1] << 8) | data->pmap->floor[2];
+				+ x] = (data->pmap->floor[0] << 16) |
+				(data->pmap->floor[1] << 8) | data->pmap->floor[2];
 		y++;
 	}
 }
