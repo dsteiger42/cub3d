@@ -22,7 +22,7 @@ int	handle_mouse(int x, int y, t_data *data)
 	}
 	delta_x = x - old_x;
 	// Ignora deltas muito grandes (pode ser warp ou salto inesperado)
-	if (delta_x > WIN_WIDTH / 2 || delta_x < -WIN_WIDTH / 2)
+	if (delta_x > data->screen_h / 2 || delta_x < -data->screen_h / 2)
 	{
 		old_x = x;
 		old_y = y;
@@ -33,21 +33,21 @@ int	handle_mouse(int x, int y, t_data *data)
 	old_x = x;
 	old_y = y;
 	// wrap horizontal (um pouco antes da borda)
-	if (x > WIN_WIDTH - DIST_EDGE_MOUSE_WRAP - 5 || x < DIST_EDGE_MOUSE_WRAP
+	if (x > data->screen_h - DIST_EDGE_MOUSE_WRAP - 5 || x < DIST_EDGE_MOUSE_WRAP
 		+ 5)
 	{
-		new_x = (x > WIN_WIDTH - DIST_EDGE_MOUSE_WRAP
-				- 5) ? DIST_EDGE_MOUSE_WRAP + 5 : WIN_WIDTH
+		new_x = (x > data->screen_h - DIST_EDGE_MOUSE_WRAP
+				- 5) ? DIST_EDGE_MOUSE_WRAP + 5 : data->screen_h
 			- DIST_EDGE_MOUSE_WRAP - 5;
 		mlx_mouse_move(data->mlx, data->mlx_win, new_x, y);
 		ignore_event = 1;
 	}
 	// wrap vertical (opcional)
-	if (y > WIN_HEIGHT - DIST_EDGE_MOUSE_WRAP - 5 || y < DIST_EDGE_MOUSE_WRAP
+	if (y > data->screen_h - DIST_EDGE_MOUSE_WRAP - 5 || y < DIST_EDGE_MOUSE_WRAP
 		+ 5)
 	{
-		new_y = (y > WIN_HEIGHT - DIST_EDGE_MOUSE_WRAP
-				- 5) ? DIST_EDGE_MOUSE_WRAP + 5 : WIN_HEIGHT
+		new_y = (y > data->screen_h - DIST_EDGE_MOUSE_WRAP
+				- 5) ? DIST_EDGE_MOUSE_WRAP + 5 : data->screen_h
 			- DIST_EDGE_MOUSE_WRAP - 5;
 		mlx_mouse_move(data->mlx, data->mlx_win, old_x, new_y);
 		ignore_event = 1;

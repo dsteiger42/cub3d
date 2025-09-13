@@ -1,10 +1,7 @@
 #include "../includes/cub3d.h"
 
-#define SCREEN_W 960
-#define SCREEN_H 720
-
 /* Calcula distância perpendicular e posição da parede */
-static void	calculate_wall(t_ray *ray, t_player *player)
+static void	calculate_wall(t_ray *ray, t_player *player, t_data *data)
 {
 	if (ray->side == 0)
 		ray->perp_wall_dist = (ray->map_x - player->pos_x + (1 - ray->step_x)
@@ -14,13 +11,13 @@ static void	calculate_wall(t_ray *ray, t_player *player)
 				/ 2.0) / ray->dir_y;
 	if (ray->perp_wall_dist <= 0.0)
 		ray->perp_wall_dist = 1e-30;
-	ray->line_height = (int)(SCREEN_H / ray->perp_wall_dist);
-	ray->draw_start = -ray->line_height / 2 + SCREEN_H / 2;
+	ray->line_height = (int)(data->screen_h / ray->perp_wall_dist);
+	ray->draw_start = -ray->line_height / 2 + data->screen_h / 2;
 	if (ray->draw_start < 0)
 		ray->draw_start = 0;
-	ray->draw_end = ray->line_height / 2 + SCREEN_H / 2;
-	if (ray->draw_end >= SCREEN_H)
-		ray->draw_end = SCREEN_H - 1;
+	ray->draw_end = ray->line_height / 2 + data->screen_h / 2;
+	if (ray->draw_end >= data->screen_h)
+		ray->draw_end = data->screen_h - 1;
 	if (ray->side == 0)
 		ray->wall_x = player->pos_y + ray->perp_wall_dist * ray->dir_y;
 	else
@@ -46,9 +43,9 @@ static void	draw_column(t_data *data, t_img *screen, int x, t_ray *ray)
 			&& ray->dir_y > 0))
 		tex_x = tex->width - tex_x - 1;
 	step = (double)tex->height / ray->line_height;
-	tex_pos = (ray->draw_start - SCREEN_H / 2 + ray->line_height / 2) * step;
+	tex_pos = (ray->draw_start - data->screen_h / 2 + ray->line_height / 2) * step;
 	y = 0;
-	while (y < SCREEN_H)
+	while (y < data->screen_h)
 	{
 		if (y < ray->draw_start)
 			screen->addr[y * (screen->size_line / 4)
@@ -68,9 +65,9 @@ static void	draw_column(t_data *data, t_img *screen, int x, t_ray *ray)
 }
 
 /* Inicializa ray para cada coluna */
-static void	init_ray(t_ray *ray, int x, t_player *player)
+static void	init_ray(t_ray *ray, int x, t_player *player, t_data *data)
 {
-	ray->camera_x = 2.0 * x / SCREEN_W - 1.0;
+	ray->camera_x = 2.0 * x / data->screen_w - 1.0;
 	ray->dir_x = player->dir_x + player->plane_x * ray->camera_x;
 	ray->dir_y = player->dir_y + player->plane_y * ray->camera_x;
 	ray->map_x = (int)player->pos_x;
@@ -100,12 +97,12 @@ void	raycast(t_data *data)
 	if (!screen.addr || screen.pixel_bits != 32)
 		return ;
 	x = 0;
-	while (x < SCREEN_W)
+	while (x < data->screen_w)
 	{
-		init_ray(&ray, x, &data->player);
+		init_ray(&ray, x, &data->player, data);
 		set_dda(&ray, &data->player);
 		perform_dda(&ray, data);
-		calculate_wall(&ray, &data->player);
+		calculate_wall(&ray, &data->player, data);
 		draw_column(data, &screen, x, &ray);
 		x++;
 	}

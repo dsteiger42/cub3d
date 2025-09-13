@@ -65,6 +65,20 @@ int	game_loop(t_data *data)
 	return (0);
 }
 
+void	get_screen_size(t_data *data)
+{
+	mlx_get_screen_size(data->mlx, &data->screen_w, &data->screen_h);
+
+	data->screen_w = (int)(data->screen_w * 0.8);
+	data->screen_h = (int)(data->screen_h * 0.8);
+
+	if (data->screen_w > 1920)
+		data->screen_w = 1920;
+	if (data->screen_h > 1080)
+		data->screen_h = 1080;
+}
+
+
 void	init_mlx(t_data *data)
 {
 	data->mlx = mlx_init();
@@ -72,10 +86,11 @@ void	init_mlx(t_data *data)
 		clean_exit(data, err_msg("mlx: Could not start mlx\n", 1));
 	if (init_textures(data) == -1)
 		clean_exit(data, err_msg("Textures init failed\n", 1));
-	data->mlx_win = mlx_new_window(data->mlx, 960, 720, "cub3D");
+    get_screen_size(data);
+	data->mlx_win = mlx_new_window(data->mlx, data->screen_w, data->screen_h, "cub3D");
 	if (!data->mlx_win)
 		clean_exit(data, err_msg("mlx_win: Could not open mlx_window\n", 1));
-	data->img = mlx_new_image(data->mlx, 960, 720);
+	data->img = mlx_new_image(data->mlx, data->screen_w, data->screen_h);
 	if (!data->img)
 		clean_exit(data, err_msg("img: Could not create new image\n", 1));
 	mlx_hook(data->mlx_win, 2, 1L << 0, handle_keypress, data);

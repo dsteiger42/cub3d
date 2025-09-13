@@ -56,8 +56,7 @@
 # define ROT_SPEED 0.01
 # define MOUSE_SENSITIVITY 0.003
 # define DIST_EDGE_MOUSE_WRAP 10
-# define WIN_WIDTH 960
-# define WIN_HEIGHT 720
+
 # define PLAYER_RADIUS 0.3
 
 typedef struct s_player
@@ -140,6 +139,8 @@ typedef struct s_data
 	void		*mlx_win;
 	void		*img;
 	char		*map_file;
+	int			screen_w;
+	int			screen_h;
 	t_keys		keys;
 	t_player	player;
 	t_map		*pmap;
