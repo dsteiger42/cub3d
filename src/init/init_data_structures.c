@@ -1,5 +1,7 @@
 #include "../includes/cub3d.h"
 
+// falta inicializar variaveis t_img
+
 int	init_player(t_player *player)
 {
 	if (!player)

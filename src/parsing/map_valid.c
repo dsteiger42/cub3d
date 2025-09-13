@@ -12,42 +12,6 @@
 
 #include "../includes/cub3d.h"
 
-int valid_map_name(char *file)
-{
-	int len;
-
-	if (!file)
-		return (err_msg("Invalid pointer\n", 1), -1);	
-	len = ft_strlen(file);
-	if (len < 4 || ft_strncmp(&file[len - 4], ".cub", 4) != 0)
-		return (err_msg("Map is not a .cub file\n", 1), -1);
-	return (0);
-}
-
-
-int validfd(t_map *map, char *file)
-{
-	int fd;
-	char *line;
-
-	map->line_count = 0;
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-		return (err_msg("Invalid fd\n", 1), -1);
-	else
-	{
-		line = get_next_line(fd);
-		while (line != NULL)
-		{
-			map->line_count++;
-			free(line);
-			line = get_next_line(fd);
-		}
-		close(fd);
-	}
-	return (0);
-}
-
 static void	set_player_dir_plane(t_player *player, char c)
 {
 	if (c == 'N')
@@ -96,8 +60,8 @@ static int	handle_player_start(t_data *data, char c, int x, int y)
 
 int	valid_map(t_data *data)
 {
-	int	y;
-	int	x;
+	int		y;
+	int		x;
 	char	c;
 
 	if (!data || !data->pmap || !data->pmap->map)
@@ -121,4 +85,3 @@ int	valid_map(t_data *data)
 		return (err_msg("No start position found\n", 1), -1);
 	return (0);
 }
-

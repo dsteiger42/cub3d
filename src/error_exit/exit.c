@@ -12,10 +12,10 @@
 
 #include "../includes/cub3d.h"
 
-void clean_exit(t_data *data, int exit_code)
+void	clean_exit(t_data *data, int exit_code)
 {
-    free_data(data);
-    exit(exit_code);
+	free_data(data);
+	exit(exit_code);
 }
 
 int	err_msg(char *msg, int exit_code)

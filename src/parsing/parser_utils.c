@@ -14,15 +14,15 @@ int	valid_char(char *line)
 	return (0);
 }
 
-int open_and_check(char *path)
+int	open_and_check(char *path)
 {
-    int fd;
+	int	fd;
 
-    fd = open(path, O_RDONLY);
-    if (fd < 0)
-        return (err_msg("Texture file not found\n", 1), -1);
-    close(fd);
-    return (0);
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (err_msg("Texture file not found\n", 1), -1);
+	close(fd);
+	return (0);
 }
 
 char	**ft_realloc(char **map, int new_size)

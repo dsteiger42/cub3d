@@ -3,17 +3,24 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g3
 
 SRC = src/main.c \
-	src/parsing/check_map.c \
-	src/parsing/create_map.c \
+	src/error_exit/exit.c \
+	src/init/init_data_structures.c \
+	src/init/init_textures.c \
+	src/init/init.c \
+	src/keypress/keypress.c \
+	src/movement/cursor.c \
+	src/movement/move.c \
+	src/movement/rotate.c \
+	src/parsing/map_create.c \
+	src/parsing/map_name.c \
+	src/parsing/map_open.c \
+	src/parsing/map_valid.c \
 	src/parsing/parser_fd.c \
 	src/parsing/parser_utils.c \
-	src/init/init.c \
-	src/init/init_textures.c \
-	src/init/init_data_structures.c \
-	src/raycast/raycast.c \
 	src/raycast/raycast_utils.c \
-	src/error_exit/exit.c \
-	src/utils.c
+	src/raycast/raycast.c \
+	src/utils/utils.c \
+	src/utils/utils2.c
 
 OBJ_DIR = objects
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
