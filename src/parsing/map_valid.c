@@ -12,7 +12,7 @@
 
 #include "../includes/cub3d.h"
 
-static void	set_player_dir_plane(t_player *player, char c)
+static void	set_player_dir_plane_ns(t_player *player, char c)
 {
 	if (c == 'N')
 	{
@@ -28,7 +28,11 @@ static void	set_player_dir_plane(t_player *player, char c)
 		player->plane_x = -0.66;
 		player->plane_y = 0;
 	}
-	else if (c == 'E')
+}
+
+static void	set_player_dir_plane_ew(t_player *player, char c)
+{
+	if (c == 'E')
 	{
 		player->dir_x = 1;
 		player->dir_y = 0;
@@ -44,7 +48,12 @@ static void	set_player_dir_plane(t_player *player, char c)
 	}
 }
 
-/* trata a posição inicial do jogador */
+static void	set_player_dir_plane(t_player *player, char c)
+{
+	set_player_dir_plane_ns(player, c);
+	set_player_dir_plane_ew(player, c);
+}
+
 static int	handle_player_start(t_data *data, char c, int x, int y)
 {
 	if (!data || !ft_strchr("NSEW", c))

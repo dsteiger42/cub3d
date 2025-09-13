@@ -38,10 +38,11 @@ static int	parse_texture(t_map *pmap, char *id, char *path)
 
 static int	is_number_invalid(char *s)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	if (!s)
-		return (1); 
+		return (1);
 	while (s[i] && (s[i] == ' ' || s[i] == '\t'))
 		i++;
 	if (!s[i])
@@ -54,7 +55,6 @@ static int	is_number_invalid(char *s)
 	}
 	return (0);
 }
-
 
 static int	parse_color_line(int *arr, char *line)
 {
@@ -109,7 +109,10 @@ static int	parse_map_lines(t_data *data, int fd, char *first_line)
 	data->pmap->line_count = 1;
 	data->pmap->map = malloc(sizeof(char *) * 2);
 	if (!data->pmap->map)
+	{
+		free(first_line);
 		return (err_msg("Malloc failed\n", 1), -1);
+	}
 	if (valid_char(first_line) == -1)
 	{
 		free(first_line);

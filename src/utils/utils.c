@@ -29,7 +29,7 @@ void	ft_free_split(char **split)
 
 void	free_textures(t_data *data)
 {
-	int i;
+	int	i;
 
 	if (!data)
 		return ;
@@ -58,10 +58,14 @@ void	free_map_and_textures(t_map *pmap)
 		free(pmap->map2[i++]);
 	free(pmap->map2);
 	pmap->map2 = NULL;
-	free(pmap->no); pmap->no = NULL;
-	free(pmap->so); pmap->so = NULL;
-	free(pmap->we); pmap->we = NULL;
-	free(pmap->ea); pmap->ea = NULL;
+	free(pmap->no);
+	pmap->no = NULL;
+	free(pmap->so);
+	pmap->so = NULL;
+	free(pmap->we);
+	pmap->we = NULL;
+	free(pmap->ea);
+	pmap->ea = NULL;
 	pmap->line_count = 0;
 }
 
@@ -87,7 +91,6 @@ void	free_data(t_data *data)
 		data->mlx = NULL;
 	}
 }
-
 
 void	free_mlx(t_data *data)
 {

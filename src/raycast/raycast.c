@@ -43,7 +43,8 @@ static void	draw_column(t_data *data, t_img *screen, int x, t_ray *ray)
 			&& ray->dir_y > 0))
 		tex_x = tex->width - tex_x - 1;
 	step = (double)tex->height / ray->line_height;
-	tex_pos = (ray->draw_start - data->screen_h / 2 + ray->line_height / 2) * step;
+	tex_pos = (ray->draw_start - data->screen_h / 2 + ray->line_height / 2)
+		* step;
 	y = 0;
 	while (y < data->screen_h)
 	{

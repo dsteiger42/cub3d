@@ -52,8 +52,8 @@
 # define RIGHT_ARROW 65363
 # define ESC 65307
 
-# define MOVE_SPEED 0.01
-# define ROT_SPEED 0.01
+# define MOVE_SPEED 0.05
+# define ROT_SPEED 0.05
 # define MOUSE_SENSITIVITY 0.003
 # define DIST_EDGE_MOUSE_WRAP 10
 
@@ -144,7 +144,7 @@ typedef struct s_data
 	t_keys		keys;
 	t_player	player;
 	t_map		*pmap;
-	t_texture	textures[4]; // NO, SO, WE, EA
+	t_texture textures[4]; // NO, SO, WE, EA
 }				t_data;
 
 // error_exit/exit.c
@@ -154,6 +154,7 @@ int				err_msg(char *msg, int exit_code);
 // init/init_data_structures.c
 int				init_player(t_player *player);
 int				init_map(t_map *map);
+void			init_img(t_img *img);
 int				init_data_structures(t_data *data);
 
 // init/init_textures.c
