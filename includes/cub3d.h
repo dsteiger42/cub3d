@@ -6,7 +6,7 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 16:21:07 by dsteiger          #+#    #+#             */
-/*   Updated: 2025/09/14 00:48:00 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/14 23:18:19 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ typedef struct s_ray
 	double		delta_dist_y;
 	int			step_x;
 	int			step_y;
-	int side; // 0 = x side, 1 = y side
+	int			side; // 0 = x side, 1 = y side
 	double		perp_wall_dist;
 	int			line_height;
 	int			draw_start;
@@ -144,7 +144,7 @@ typedef struct s_data
 	t_keys		keys;
 	t_player	player;
 	t_map		*pmap;
-	t_texture textures[4]; // NO, SO, WE, EA
+	t_texture	textures[4]; // NO, SO, WE, EA
 }				t_data;
 
 // error_exit/exit.c

@@ -6,7 +6,7 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:53:43 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/09/14 01:03:40 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/14 23:13:46 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static void	set_player_dir_plane(t_player *player, char c)
 	else
 		set_player_dir_plane_ew(player, c);
 }
-
 
 /* trata a posição inicial do jogador */
 static int	handle_player_start(t_data *data, char c, int x, int y)
