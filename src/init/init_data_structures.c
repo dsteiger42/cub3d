@@ -6,25 +6,14 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 00:03:50 by samuel            #+#    #+#             */
-/*   Updated: 2025/09/14 00:48:11 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/14 00:58:59 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
 int	init_player(t_player *player)
-int	init_player(t_player *player)
 {
-	if (!player)
-		return (-1);
-	player->players = 0;
-	player->pos_x = -1;
-	player->pos_y = -1;
-	player->dir_x = 0;
-	player->dir_y = 0;
-	player->plane_x = 0;
-	player->plane_y = 0;
-	return (0);
 	if (!player)
 		return (-1);
 	player->players = 0;
@@ -37,7 +26,6 @@ int	init_player(t_player *player)
 	return (0);
 }
 
-int	init_map(t_map *pmap)
 int	init_map(t_map *pmap)
 {
 	if (!pmap)
@@ -67,15 +55,7 @@ int	init_map(t_map *pmap)
 }
 
 void	init_img(t_img *img)
-void	init_img(t_img *img)
 {
-	if (!img)
-		return ;
-	img->img = NULL;
-	img->addr = NULL;
-	img->pixel_bits = 0;
-	img->size_line = 0;
-	img->endian = 0;
 	if (!img)
 		return ;
 	img->img = NULL;

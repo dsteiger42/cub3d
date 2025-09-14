@@ -6,18 +6,28 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 16:53:43 by scarlos-          #+#    #+#             */
-/*   Updated: 2025/09/14 00:54:48 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/14 01:03:40 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-static void	set_w(t_player *player)
+static void	set_player_dir_plane_ew(t_player *player, char c)
 {
-	player->dir_x = -1;
-	player->dir_y = 0;
-	player->plane_x = 0;
-	player->plane_y = -0.66;
+	if (c == 'E')
+	{
+		player->dir_x = 1;
+		player->dir_y = 0;
+		player->plane_x = 0;
+		player->plane_y = 0.66;
+	}
+	else if (c == 'W')
+	{
+		player->dir_x = -1;
+		player->dir_y = 0;
+		player->plane_x = 0;
+		player->plane_y = -0.66;
+	}
 }
 
 static void	set_player_dir_plane(t_player *player, char c)
@@ -36,20 +46,10 @@ static void	set_player_dir_plane(t_player *player, char c)
 		player->plane_x = -0.66;
 		player->plane_y = 0;
 	}
+	else
+		set_player_dir_plane_ew(player, c);
 }
 
-static void	set_player_dir_plane_ew(t_player *player, char c)
-{
-	if (c == 'E')
-	{
-		player->dir_x = 1;
-		player->dir_y = 0;
-		player->plane_x = 0;
-		player->plane_y = 0.66;
-	}
-	else if (c == 'W')
-		set_w(player);
-}
 
 /* trata a posição inicial do jogador */
 static int	handle_player_start(t_data *data, char c, int x, int y)
