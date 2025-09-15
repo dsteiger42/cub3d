@@ -6,7 +6,7 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 00:03:50 by samuel            #+#    #+#             */
-/*   Updated: 2025/09/14 00:58:59 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/15 10:33:13 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,25 +68,6 @@ void	init_img(t_img *img)
 //inits map, player, textures and keys inside data
 int	init_data_structures(t_data *data)
 {
-	if (!data)
-		return (-1);
-	ft_bzero(data, sizeof(t_data));
-	data->pmap = malloc(sizeof(t_map));
-	if (!data->pmap)
-		return (err_msg("Memory allocation failed\n", 1), -1);
-	if (init_player(&data->player) == -1 || init_map(data->pmap) == -1
-		|| init_texture(&data->textures[0]) == -1
-		|| init_texture(&data->textures[1]) == -1
-		|| init_texture(&data->textures[2]) == -1
-		|| init_texture(&data->textures[3]) == -1)
-	{
-		free(data->pmap);
-		data->pmap = NULL;
-		return (err_msg("Initialization failed\n", 1), -1);
-	}
-	init_img(data->img);
-	ft_bzero(&data->keys, sizeof(t_keys));
-	return (0);
 	if (!data)
 		return (-1);
 	ft_bzero(data, sizeof(t_data));
