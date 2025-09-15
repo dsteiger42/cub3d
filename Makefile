@@ -16,6 +16,7 @@ SRC = src/main.c \
 	src/parsing/map_open.c \
 	src/parsing/map_valid.c \
 	src/parsing/parser_fd.c \
+	src/parsing/parser_textures.c \
 	src/parsing/parser_utils.c \
 	src/raycast/raycast_utils.c \
 	src/raycast/raycast.c \

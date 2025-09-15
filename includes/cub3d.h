@@ -6,7 +6,7 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 16:21:07 by dsteiger          #+#    #+#             */
-/*   Updated: 2025/09/14 23:18:19 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/15 10:25:51 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,6 +209,8 @@ int				parse_file(t_data *data, char *file);
 int				valid_char(char *line);
 int				open_and_check(char *path);
 char			**ft_realloc(char **map, int new_size);
+
+void			draw_column(t_data *data, t_img *screen, int x, t_ray *ray);
 
 // raycast/raycast_utils.c
 int				select_texture_id(t_data *data, int side, double ray_dir_x,

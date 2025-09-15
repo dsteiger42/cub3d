@@ -6,7 +6,7 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 23:47:33 by samuel            #+#    #+#             */
-/*   Updated: 2025/09/14 00:24:09 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/15 10:26:48 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,48 +35,6 @@ static void	calculate_wall(t_ray *ray, t_player *player, t_data *data)
 	else
 		ray->wall_x = player->pos_x + ray->perp_wall_dist * ray->dir_x;
 	ray->wall_x -= floor(ray->wall_x);
-}
-
-/* Desenha uma coluna */
-static void	draw_column(t_data *data, t_img *screen, int x, t_ray *ray)
-{
-	int			y;
-	int			tex_x;
-	int			tex_y;
-	double		step;
-	double		tex_pos;
-	int			color;
-	t_texture	*tex;
-
-	tex = &data->textures[select_texture_id(data, ray->side, ray->dir_x,
-			ray->dir_y)];
-	tex_x = (int)(ray->wall_x * tex->width);
-	if ((ray->side == 0 && ray->dir_x < 0) || (ray->side == 1
-			&& ray->dir_y > 0))
-		tex_x = tex->width - tex_x - 1;
-	step = (double)tex->height / ray->line_height;
-	tex_pos = (ray->draw_start - data->screen_h / 2
-			+ ray->line_height / 2) * step;
-	y = 0;
-	while (y < data->screen_h)
-	{
-		if (y < ray->draw_start)
-			screen->addr[y * (screen->size_line / 4)
-				+ x] = (data->pmap->ceiling[0] << 16) |
-				(data->pmap->ceiling[1] << 8) | data->pmap->ceiling[2];
-		else if (y <= ray->draw_end)
-		{
-			tex_y = (int)tex_pos & (tex->height - 1);
-			color = tex->data[tex_y * tex->width + tex_x];
-			screen->addr[y * (screen->size_line / 4) + x] = color;
-			tex_pos += step;
-		}
-		else
-			screen->addr[y * (screen->size_line / 4)
-				+ x] = (data->pmap->floor[0] << 16) |
-				(data->pmap->floor[1] << 8) | data->pmap->floor[2];
-		y++;
-	}
 }
 
 /* Inicializa ray para cada coluna */
