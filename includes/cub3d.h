@@ -6,7 +6,7 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 16:21:07 by dsteiger          #+#    #+#             */
-/*   Updated: 2025/09/15 10:25:51 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/15 10:59:52 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,12 @@ typedef struct s_texture
 	int			*data;
 	int			width;
 	int			height;
+	int			tex_x;
+	int			tex_y;
+	double		step;
+	double		tex_pos;
 }				t_texture;
+
 
 typedef struct s_keys
 {
