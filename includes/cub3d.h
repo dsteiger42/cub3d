@@ -6,7 +6,7 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 16:21:07 by dsteiger          #+#    #+#             */
-/*   Updated: 2025/09/15 10:59:52 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/15 13:31:18 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,6 +209,9 @@ int				valid_map(t_data *data);
 
 // parsing/parse_fd.c
 int				parse_file(t_data *data, char *file);
+
+// parsing/parse_fd_utils.c
+int				is_number_invalid(char *s);
 
 // parsing/parser_utils.c
 int				valid_char(char *line);
