@@ -6,7 +6,7 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 23:12:33 by samuel            #+#    #+#             */
-/*   Updated: 2025/09/14 23:12:39 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/15 12:34:10 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,47 +155,62 @@ static int	parse_map_lines(t_data *data, int fd, char *first_line)
 	return (0);
 }
 
-int	parse_file(t_data *data, char *file)
+int read_header(t_data *data, int fd, char **first_map_line)
 {
-	int		fd;
-	char	*line;
-	char	*first_map_line;
+    char *line;
+    int  status;
 
-	first_map_line = NULL;
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-		return (err_msg("Invalid fd\n", 1), -1);
-	while ((line = get_next_line(fd)))
-	{
-		if (line[0] == '\n' || line[0] == '\0')
-		{
-			free(line);
-			continue ;
-		}
-		if (!data->pmap->no || !data->pmap->so || !data->pmap->we
-			|| !data->pmap->ea || !data->pmap->floor[0]
-			|| !data->pmap->ceiling[0])
-		{
-			if (parse_header_line(data->pmap, line) == 0)
-			{
-				free(line);
-				continue ;
-			}
-			else
-			{
-				free(line);
-				free_map_and_textures(data->pmap);
-				close(fd);
-				return (err_msg("Invalid header\n", 1), -1);
-			}
-		}
-		first_map_line = line;
-		break ;
-	}
-	if (!first_map_line)
-		return (close(fd), err_msg("No map found\n", 1), -1);
-	if (parse_map_lines(data, fd, first_map_line) == -1)
-		return (close(fd), -1);
-	close(fd);
-	return (0);
+    line = get_next_line(fd);
+    while (line)
+    {
+        if (line[0] == '\n' || line[0] == '\0')
+        {
+            free(line);
+            line = get_next_line(fd);
+            continue ;
+        }
+        if (!data->pmap->no || !data->pmap->so || !data->pmap->we
+            || !data->pmap->ea || !data->pmap->floor[0]
+            || !data->pmap->ceiling[0])
+        {
+            status = parse_header_line(data->pmap, line);
+            if (status == 0)
+            {
+                free(line);
+                line = get_next_line(fd);
+                continue ;
+            }
+            free(line);
+            free_map_and_textures(data->pmap);
+            return err_msg("Invalid header\n", 1), -1;
+        }
+        *first_map_line = line; // primeira linha do mapa
+        return 0;
+    }
+    err_msg("No map found\n", 1);
+    return -1;
+}
+
+int parse_file(t_data *data, char *file)
+{
+    int  fd;
+    int  status;
+    char *first_map_line;
+
+    fd = open(file, O_RDONLY);
+    if (fd < 0)
+        return err_msg("Invalid fd\n", 1), -1;
+    first_map_line = NULL;
+    status = read_header(data, fd, &first_map_line);
+    if (status == -1)
+        return close(fd), -1;
+
+    if (!first_map_line)
+        return close(fd), err_msg("No map found\n", 1), -1;
+
+    if (parse_map_lines(data, fd, first_map_line) == -1)
+        return close(fd), -1;
+
+    close(fd);
+    return 0;
 }
