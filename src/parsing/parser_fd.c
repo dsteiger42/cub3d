@@ -6,30 +6,32 @@
 /*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 23:12:33 by samuel            #+#    #+#             */
-/*   Updated: 2025/09/15 13:32:10 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/22 11:57:46 by samuel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-int	init_map_storage(t_data *data, char *first_line)
+int init_map_storage(t_data *data, char *first_line)
 {
-	data->pmap->line_count = 1;
-	data->pmap->map = malloc(sizeof(char *) * 2);
-	if (!data->pmap->map)
-	{
-		free(first_line);
-		return (err_msg("Malloc failed\n", 1), -1);
-	}
-	if (valid_char(first_line) == -1)
-	{
-		free(first_line);
-		return (-1);
-	}
-	data->pmap->map[0] = first_line;
-	data->pmap->map[1] = NULL;
-	return (0);
+    data->pmap->line_count = 1;
+    data->pmap->map = malloc(sizeof(char *) * 2);
+    if (!data->pmap->map)
+    {
+        free(first_line);
+        return (err_msg("Malloc failed\n", 1), -1);
+    }
+    data->pmap->map[0] = NULL;
+    data->pmap->map[1] = NULL;
+    if (valid_char(first_line) == -1)
+    {
+        free(first_line);
+        return (-1);
+    }
+    data->pmap->map[0] = first_line;
+    return (0);
 }
+
 
 int	parse_map_lines(t_data *data, int fd, char *first_line)
 {
