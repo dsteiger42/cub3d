@@ -80,4 +80,3 @@ void	draw_column(t_data *data, t_img *screen, int x, t_ray *ray)
 	draw_wall(data, screen, x, ray);
 	draw_floor(data, screen, x, ray);
 }
-

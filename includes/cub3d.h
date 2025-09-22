@@ -105,7 +105,6 @@ typedef struct s_texture
 	double		tex_pos;
 }				t_texture;
 
-
 typedef struct s_keys
 {
 	int			w;
@@ -130,7 +129,7 @@ typedef struct s_ray
 	double		delta_dist_y;
 	int			step_x;
 	int			step_y;
-	int			side; // 0 = x side, 1 = y side
+	int side; // 0 = x side, 1 = y side
 	double		perp_wall_dist;
 	int			line_height;
 	int			draw_start;
@@ -149,7 +148,7 @@ typedef struct s_data
 	t_keys		keys;
 	t_player	player;
 	t_map		*pmap;
-	t_texture	textures[4]; // NO, SO, WE, EA
+	t_texture textures[4]; // NO, SO, WE, EA
 }				t_data;
 
 // error_exit/exit.c
@@ -207,11 +206,23 @@ int				validfd(t_map *map, char *file);
 // parsing/map_valid.c
 int				valid_map(t_data *data);
 
+// parssing/parse_header.c
+int				assign_texture(char **dst, char *trim, char *id);
+int				parse_texture(t_map *pmap, char *id, char *path);
+int				parse_color_line(int *arr, char *line);
+int				parse_header_line(t_map *pmap, char *line);
+int				set_header_line(t_data *data, char **line_ptr, int fd);
+
 // parsing/parse_fd.c
+int				init_map_storage(t_data *data, char *first_line);
+int				parse_map_lines(t_data *data, int fd, char *first_line);
+int				is_header_complete(t_map *pmap);
+int				read_header(t_data *data, int fd, char **first_map_line);
 int				parse_file(t_data *data, char *file);
 
 // parsing/parse_fd_utils.c
 int				is_number_invalid(char *s);
+int				append_map_line(t_data *data, char *line);
 
 // parsing/parser_utils.c
 int				valid_char(char *line);

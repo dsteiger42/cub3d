@@ -31,3 +31,21 @@ int	is_number_invalid(char *s)
 	}
 	return (0);
 }
+
+int	append_map_line(t_data *data, char *line)
+{
+	int	i;
+
+	i = data->pmap->line_count;
+	data->pmap->map = ft_realloc(data->pmap->map, i + 1);
+	if (!data->pmap->map)
+	{
+		free(line);
+		free_map_and_textures(data->pmap);
+		return (err_msg("Malloc failed\n", 1), -1);
+	}
+	data->pmap->map[i] = line;
+	data->pmap->line_count++;
+	data->pmap->map[data->pmap->line_count] = NULL;
+	return (0);
+}
