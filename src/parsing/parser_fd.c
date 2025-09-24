@@ -12,26 +12,25 @@
 
 #include "../includes/cub3d.h"
 
-int init_map_storage(t_data *data, char *first_line)
+int	init_map_storage(t_data *data, char *first_line)
 {
-    data->pmap->line_count = 1;
-    data->pmap->map = malloc(sizeof(char *) * 2);
-    if (!data->pmap->map)
-    {
-        free(first_line);
-        return (err_msg("Malloc failed\n", 1), -1);
-    }
-    data->pmap->map[0] = NULL;
-    data->pmap->map[1] = NULL;
-    if (valid_char(first_line) == -1)
-    {
-        free(first_line);
-        return (-1);
-    }
-    data->pmap->map[0] = first_line;
-    return (0);
+	data->pmap->line_count = 1;
+	data->pmap->map = malloc(sizeof(char *) * 2);
+	if (!data->pmap->map)
+	{
+		free(first_line);
+		return (err_msg("Malloc failed\n", 1), -1);
+	}
+	data->pmap->map[0] = NULL;
+	data->pmap->map[1] = NULL;
+	if (valid_char(first_line) == -1)
+	{
+		free(first_line);
+		return (-1);
+	}
+	data->pmap->map[0] = first_line;
+	return (0);
 }
-
 
 int	parse_map_lines(t_data *data, int fd, char *first_line)
 {
@@ -57,8 +56,8 @@ int	parse_map_lines(t_data *data, int fd, char *first_line)
 
 int	is_header_complete(t_map *pmap)
 {
-	if (pmap->no && pmap->so && pmap->we && pmap->ea
-		&& pmap->floor[0] && pmap->ceiling[0])
+	if (pmap->no && pmap->so && pmap->we && pmap->ea && pmap->floor[0]
+		&& pmap->ceiling[0])
 		return (1);
 	return (0);
 }

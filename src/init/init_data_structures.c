@@ -40,18 +40,6 @@ int	init_map(t_map *pmap)
 	ft_bzero(pmap->floor, sizeof(pmap->floor));
 	ft_bzero(pmap->ceiling, sizeof(pmap->ceiling));
 	return (0);
-	if (!pmap)
-		return (-1);
-	pmap->map = NULL;
-	pmap->map2 = NULL;
-	pmap->line_count = 0;
-	pmap->no = NULL;
-	pmap->so = NULL;
-	pmap->we = NULL;
-	pmap->ea = NULL;
-	ft_bzero(pmap->floor, sizeof(pmap->floor));
-	ft_bzero(pmap->ceiling, sizeof(pmap->ceiling));
-	return (0);
 }
 
 void	init_img(t_img *img)

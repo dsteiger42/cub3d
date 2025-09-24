@@ -35,10 +35,10 @@ static void	copy_pixels(t_texture *tex, t_img *tmp)
 	while (y < tex->height)
 	{
 		if (tex->width <= row_len)
-			memcpy(&tex->data[y * tex->width], &tmp->addr[y * row_len],
+			ft_memcpy(&tex->data[y * tex->width], &tmp->addr[y * row_len],
 				sizeof(int) * tex->width);
 		else
-			memset(&tex->data[y * tex->width], 0, sizeof(int) * tex->width);
+			ft_memset(&tex->data[y * tex->width], 0, sizeof(int) * tex->width);
 		y++;
 	}
 }
