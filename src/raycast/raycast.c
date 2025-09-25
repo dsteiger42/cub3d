@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dsteiger <dsteiger@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 23:47:33 by samuel            #+#    #+#             */
-/*   Updated: 2025/09/25 13:44:54 by scarlos-         ###   ########.fr       */
+/*   Updated: 2025/09/25 13:51:15 by dsteiger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-static void calculate_wall(t_ray *ray, t_player *player, t_data *data)
+static void	calculate_wall(t_ray *ray, t_player *player, t_data *data)
 {
 	if (ray->side == 0)
-		ray->perp_wall_dist = (ray->map_x - player->pos_x + (1 - ray->step_x) / 2.0) / ray->dir_x;
+		ray->perp_wall_dist = (ray->map_x - player->pos_x + (1 - ray->step_x)
+				/ 2.0) / ray->dir_x;
 	else
-		ray->perp_wall_dist = (ray->map_y - player->pos_y + (1 - ray->step_y) / 2.0) / ray->dir_y;
+		ray->perp_wall_dist = (ray->map_y - player->pos_y + (1 - ray->step_y)
+				/ 2.0) / ray->dir_y;
 	if (ray->perp_wall_dist <= 0.0)
 		ray->perp_wall_dist = 1e-30;
 	ray->line_height = (int)(data->screen_h / ray->perp_wall_dist);
