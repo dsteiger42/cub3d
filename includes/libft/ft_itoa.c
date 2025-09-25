@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pviegas- <pviegas-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 17:00:15 by pviegas-          #+#    #+#             */
-/*   Updated: 2023/11/13 13:42:27 by pviegas-         ###   ########.fr       */
+/*   Created: 2025/09/25 12:55:43 by scarlos-          #+#    #+#             */
+/*   Updated: 2025/09/25 12:55:51 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,3 @@ char
 	ft_strrev(str);
 	return (str);
 }
-
-/*
-int	main(void)
-{
-	int a = 1234;
-	char	*str = ft_itoa(a);
-	printf("%s", str);
-	free(str);
-	return (0);
-}*/

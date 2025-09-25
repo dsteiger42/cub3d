@@ -3,24 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samuel <samuel@student.42.fr>              +#+  +:+       +#+        */
+/*   By: scarlos- <scarlos-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 23:47:33 by samuel            #+#    #+#             */
-/*   Updated: 2025/09/15 10:26:48 by samuel           ###   ########.fr       */
+/*   Updated: 2025/09/25 13:44:54 by scarlos-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-/* Calcula distância perpendicular e posição da parede */
-static void	calculate_wall(t_ray *ray, t_player *player, t_data *data)
+static void calculate_wall(t_ray *ray, t_player *player, t_data *data)
 {
 	if (ray->side == 0)
-		ray->perp_wall_dist = (ray->map_x - player->pos_x + (1 - ray->step_x)
-				/ 2.0) / ray->dir_x;
+		ray->perp_wall_dist = (ray->map_x - player->pos_x + (1 - ray->step_x) / 2.0) / ray->dir_x;
 	else
-		ray->perp_wall_dist = (ray->map_y - player->pos_y + (1 - ray->step_y)
-				/ 2.0) / ray->dir_y;
+		ray->perp_wall_dist = (ray->map_y - player->pos_y + (1 - ray->step_y) / 2.0) / ray->dir_y;
 	if (ray->perp_wall_dist <= 0.0)
 		ray->perp_wall_dist = 1e-30;
 	ray->line_height = (int)(data->screen_h / ray->perp_wall_dist);
@@ -34,10 +31,11 @@ static void	calculate_wall(t_ray *ray, t_player *player, t_data *data)
 		ray->wall_x = player->pos_y + ray->perp_wall_dist * ray->dir_y;
 	else
 		ray->wall_x = player->pos_x + ray->perp_wall_dist * ray->dir_x;
-	ray->wall_x -= floor(ray->wall_x);
+	ray->wall_x = ray->wall_x - (int)ray->wall_x;
+	if (ray->wall_x < 0)
+		ray->wall_x += 1.0;
 }
 
-/* Inicializa ray para cada coluna */
 static void	init_ray(t_ray *ray, int x, t_player *player, t_data *data)
 {
 	ray->camera_x = 2.0 * x / data->screen_w - 1.0;
@@ -48,14 +46,21 @@ static void	init_ray(t_ray *ray, int x, t_player *player, t_data *data)
 	if (ray->dir_x == 0.0)
 		ray->delta_dist_x = 1e30;
 	else
-		ray->delta_dist_x = fabs(1.0 / ray->dir_x);
+	{
+		ray->delta_dist_x = 1.0 / ray->dir_x;
+		if (ray->delta_dist_x < 0)
+			ray->delta_dist_x = -ray->delta_dist_x;
+	}
 	if (ray->dir_y == 0.0)
 		ray->delta_dist_y = 1e30;
 	else
-		ray->delta_dist_y = fabs(1.0 / ray->dir_y);
+	{
+		ray->delta_dist_y = 1.0 / ray->dir_y;
+		if (ray->delta_dist_y < 0)
+			ray->delta_dist_y = -ray->delta_dist_y;
+	}
 }
 
-/* Função principal de raycast */
 void	raycast(t_data *data)
 {
 	t_img	screen;
